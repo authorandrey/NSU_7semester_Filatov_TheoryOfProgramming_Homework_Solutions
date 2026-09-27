@@ -1,0 +1,56 @@
+alphabet = [#, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+tapes = [ right ]
+
+START:
+	# -> #R Add_0_0
+Add_0_0:
+	0 -> 4R Add_1_0
+	1 -> 5R Add_1_0
+	2 -> 6R Add_1_0
+	3 -> 7R Add_1_0
+	4 -> 8R Add_1_0
+	5 -> 9R Add_1_0
+	6 -> 0R Add_1_1
+	7 -> 1R Add_1_1
+	8 -> 2R Add_1_1
+	9 -> 3R Add_1_1
+	# -> #H STOP
+Add_1_0:
+	0 -> 6R STOP
+	1 -> 7R STOP
+	2 -> 8R STOP
+	3 -> 9R STOP
+	4 -> 0R Inc
+	5 -> 1R Inc
+	6 -> 2R Inc
+	7 -> 3R Inc
+	8 -> 4R Inc
+	9 -> 5R Inc
+	# -> 6R STOP
+Add_1_1:
+	0 -> 7R STOP
+	1 -> 8R STOP
+	2 -> 9R STOP
+	3 -> 0R Inc
+	4 -> 1R Inc
+	5 -> 2R Inc
+	6 -> 3R Inc
+	7 -> 4R Inc
+	8 -> 5R Inc
+	9 -> 6R Inc
+	# -> 7R STOP
+Inc:
+	0 -> 1H STOP
+	1 -> 2H STOP
+	2 -> 3H STOP
+	3 -> 4H STOP
+	4 -> 5H STOP
+	5 -> 6H STOP
+	6 -> 7H STOP
+	7 -> 8H STOP
+	8 -> 9H STOP
+	9 -> 0R Inc
+	# -> 1H STOP
+WriteOne:
+	# -> 1H STOP

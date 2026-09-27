@@ -1,0 +1,28 @@
+alphabet = [#, 0, 1]
+
+tapes = [ right ]
+
+START:
+	# -> #R CheckEmpty
+CheckEmpty:
+	# -> #H STOP
+	1 -> 1R RMove
+	0 -> 0R RMove
+RMove:
+	# -> #L Inc
+	1 -> 1R RMove
+	0 -> 0R RMove
+Inc:
+	0 -> 1H STOP
+	1 -> 0L Inc
+	# -> 1H ShiftStart
+ShiftStart:
+	1 -> #R Shift_1
+Shift_1:
+	1 -> 1R Shift_1
+	0 -> 1R Shift_0
+	# -> 1H STOP
+Shift_0:
+	1 -> 0R Shift_1
+	0 -> 0R Shift_0
+	# -> 0H STOP

@@ -1,0 +1,27 @@
+// Number k is fixed in base m. Let k[i] be i-th digit of k in base m, where i=0,...,L-1
+// m is the base (m >= 2)
+// The program adds k to the input number
+
+START:
+	# -> #R Add_{0}_{0}
+// Add i-th digit of k to i-th place of the input word
+// Here i=0,...,L-1; carry=0,1
+// If i==0 then generate only for carry=0 (because in START only Add_{0}_{0} is called)
+Add_{i}_{carry}:
+	// For each d=0,...,m-1
+	d -> {(d+k[i]+carry)%m} R Add_{i+1}_{(d+k[i]+carry)//m}		// if i+1<L
+	d -> {(d+k[i]+carry)%m} R {STOP || Inc}						// if i==L-1, {STOP || Inc} means STOP if (d+k[i]+carry)//m == 0, else Inc
+	
+	// The length of the word is less than L; !!! Here i!=0
+	# -> {(k[i]+carry)%m} R Add_{i+1}_{(k[i]+carry)//m}			// if i+1<L
+	# -> {(k[i]+carry)%m} R {STOP || WriteOne}					// if i==L-1, {STOP || WriteOne} means STOP if (k[i]+carry)//m == 0, else WriteOne
+	
+	// If i==0. It means that the input word is empty
+	# -> #H STOP
+Inc:
+	// For each d=0,...,m-2
+	d -> (d+1)H STOP
+	(m-1) -> 0R Inc
+	# -> 1H STOP
+WriteOne:
+	# -> 1H STOP

@@ -1,0 +1,18 @@
+alphabet = [#, 0, 1]
+
+tapes = [ right ]
+
+START:
+	# -> #R Check_1
+Check_1:
+	# -> #R STOP			// the word is empty
+	0 -> 1R Inc
+	1 -> 0R Check_2
+Check_2:
+	0 -> 0R Inc
+	1 -> 1R Inc
+	# -> 0R Inc 			// for the case #1#
+Inc:
+	0 -> 1H STOP
+	1 -> 0R Inc
+	# -> 1H STOP

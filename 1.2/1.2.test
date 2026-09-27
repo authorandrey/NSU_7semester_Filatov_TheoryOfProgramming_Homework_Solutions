@@ -1,0 +1,14 @@
+// tests addition of 1 to binary number written in normal order
+
+test_empty : #                -> #
+test_zero  : #0#              -> #1#
+test_1     : #1#              -> #10#
+test_2     : #10#             -> #11#
+test_3     : #11#             -> #100#
+test_4     : #100#            -> #101#
+test_5     : #101#            -> #110#
+test_6     : #110#            -> #111#
+test_7     : #111#            -> #1000#
+test_127   : #1111111#        -> #10000000#
+test_567   : #1000110111#     -> #1000111000#
+test_1023  : #1111111111#     -> #10000000000#

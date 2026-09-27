@@ -1,0 +1,29 @@
+// Number k is fixed. Let k[i] be i-th bit of k in binary, where i=0,...,L-1
+// The program adds k to the input number
+
+START:
+	# -> #R Add_{0}_{0}
+// Add i-th bit of k to i-th place of the input word
+// Here i=0,...,L-1; carry=0,1
+// If i==0 than generate only for carry=0 (because in START the only Add_{0}_{0} is called)
+Add_{i}_{carry}:
+	0 -> {(0+k[i]+carry)%2} R Add_{i+1}_{(0+k[i]+carry)//2}		// if i+1<L
+	1 -> {(1+k[i]+carry)%2} R Add_{i+1}_{(1+k[i]+carry)//2}		// if i+1<L
+	
+	// Here i=L-1
+	// {STOP || Inc} means STOP if (n+k[i]+carry)//2==0, where n=0,1. Otherwise set Inc
+	0 -> {(0+k[i]+carry)%2} R {STOP || Inc}
+	1 -> {(1+k[i]+carry)%2} R {STOP || Inc}
+	
+	// The length of the word is less than L; !!! Here i!=0
+	# -> {(k[i]+carry)%2} R Add_{i+1}_{(k[i]+carry)//2}			// if i+1<L
+	# -> {(k[i]+carry)%2} R {STOP || WriteOne}					// if i=L-1
+	
+	// If i==0. It means that the input word is empty
+	# -> #H STOP
+Inc:
+	0 -> 1H STOP
+	1 -> 0R Inc
+	# -> 1H STOP
+WriteOne:
+	# -> 1H STOP

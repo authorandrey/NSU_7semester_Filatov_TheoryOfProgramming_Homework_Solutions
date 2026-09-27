@@ -1,0 +1,33 @@
+// This programm adds 4 to the inputted word of the number in inversed binary format.
+alphabet = [#, 0, 1]
+
+tapes = [ right ]
+
+START:
+	# -> #R Add_0_0
+Add_0_0:
+	0 -> 0R Add_1_0
+	1 -> 1R Add_1_0
+	# -> #H STOP
+Add_1_0:
+	0 -> 0R Add_2_0
+	1 -> 1R Add_2_0
+	# -> 0R Add_2_0
+Add_1_1:
+	0 -> 1R Add_2_0
+	1 -> 0R Add_2_1
+	# -> 1R Add_2_0
+Add_2_0:
+	0 -> 1R STOP
+	1 -> 0R Inc
+	# -> 1R STOP
+Add_2_1:
+	0 -> 0R Inc
+	1 -> 1R Inc
+	# -> 0R WriteOne
+Inc:
+	0 -> 1H STOP
+	1 -> 0R Inc
+	# -> 1H STOP
+WriteOne:
+	# -> 1H STOP
