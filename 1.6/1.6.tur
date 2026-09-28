@@ -1,0 +1,50 @@
+alphabet = [#, 0, 1]
+
+tapes = [ right ]
+
+START:
+    # -> #R CheckEmpty
+CheckEmpty:
+    # -> #H STOP
+    0 -> #R Right_0
+    1 -> #R Right_1
+Right_0:                    // Carry 0 to the nearest right #
+    # -> 0L Left
+    0 -> 0R Right_0
+    1 -> 1R Right_0
+Right_1:                    // Carry 1 to the nearest right #
+    # -> 1L Left
+    0 -> 0R Right_1
+    1 -> 1R Right_1
+Left:                       // Set mark for reverse iteration and step left
+    # -> #R RMove
+    0 -> #L Left_0
+    1 -> #L Left_1
+Left_0:                     // Carry 0 to the nearest left #
+    # -> 0R Right
+    0 -> 0L Left_0
+    1 -> 1L Left_0
+Left_1:                     // Carry 1 to the nearest left #
+    # -> 1R Right
+    0 -> 0L Left_1
+    1 -> 1L Left_1
+Right:                      // Set mark for reverse iteration and move right
+    # -> #R RMove
+    0 -> #R Right_0
+    1 -> #R Right_1
+RMove:                      // Move to the right nearest #
+    # -> #L Shift_#
+    0 -> 0R RMove
+    1 -> 1R RMove
+Shift_#:                    // Shift one symbol left
+    # -> #H STOP
+    0 -> #L Shift_0
+    1 -> #L Shift_1
+Shift_1:
+    # -> 1H STOP
+    0 -> 1L Shift_0
+    1 -> 1L Shift_1
+Shift_0:
+    # -> 0H STOP
+    0 -> 0L Shift_0
+    1 -> 0L Shift_1
