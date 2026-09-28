@@ -1,4 +1,8 @@
+"""Generate a Turing machine description for adding k."""
+
+
 def generate_mt(k):
+    """Return a Turing machine description that adds k to its input."""
     bits = []
     temp = k
     while temp > 0:
@@ -6,11 +10,14 @@ def generate_mt(k):
         temp >>= 1
     if not bits:
         bits = [0]
-    L = len(bits)
+    L = len(bits)  # noqa: N806
     k_bits = bits
 
     lines = []
-    lines.append(f"// This programm adds {k} to the inputted word of the number in inversed binary format.")
+    lines.append(
+        f"// This programm adds {k} to the inputted word of the number "
+        "in inversed binary format."
+    )
     lines.append("alphabet = [#, 0, 1]\n")
     lines.append("tapes = [ right ]\n")
     lines.append("START:")

@@ -1,2 +1,13 @@
-# NSU_7semester_Filatov_TheoryOfProgramming_Homework_Solutions
-All the programs and tests for solving homework of A. Yu. Filatov's seminars.
+# Решения домашних заданий по теории программирования
+
+Репозиторий содержит решения домашних заданий по теории программирования для семинаров Филатова. Задания взяты из [сборника задач](https://github.com/Svazars/theory-of-programming-notes/blob/main/pdfs/problems.pdf), подготовленного в рамках проекта [Theory of Programming Notes](https://github.com/Svazars/theory-of-programming-notes).
+
+## Структура
+
+Каждая папка соответствует номеру задания. В папках находятся программы машин Тьюринга (`.tur`) и тесты (`.test`). Для заданий `1.4` и `1.5` также добавлены Python-генераторы машин, шаблоны и PowerShell-скрипты для генерации программы и её проверки на тестах.
+
+## Проверка решений
+
+Для выполнения сценариев требуются Python, Java и PowerShell. Сценарии `1.4.GenerateAndRunTests.ps1` и `1.5.GenerateAndRunTests.ps1` запускайте из соответствующей папки задания. Файл эмулятора `turing-machine-emulator.jar` должен находиться в корневой папке репозитория.
+
+Используется [эмулятор машин Тьюринга](https://github.com/Svazars/turing-machine-emulator/releases/tag/v0.1.0). Инструкции по установке и настройке Python, Java и эмулятора приведены в исходных проектах.

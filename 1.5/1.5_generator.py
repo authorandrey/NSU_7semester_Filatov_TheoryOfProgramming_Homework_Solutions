@@ -1,7 +1,10 @@
+"""Generate a multitape machine description for adding a constant."""
+
 import sys
 
 
 def generate_mt(k, m):
+    """Generate a multitape machine description for adding k in base m."""
     digits = []
     temp = k
     if temp == 0:
@@ -10,7 +13,7 @@ def generate_mt(k, m):
         while temp > 0:
             digits.append(temp % m)
             temp //= m
-    L = len(digits)
+    L = len(digits)  # noqa: N806
     k_digits = digits
 
     lines = []
