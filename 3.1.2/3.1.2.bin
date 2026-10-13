@@ -1,0 +1,25 @@
+18   2      ;   1.     Read 2
+18   3      ;   2.     Read 3
+
+            ; WHILE:
+2    3      ;   3.     Load 3
+24   17     ;   4.     JZero END
+18   0      ;   5.     Read 0
+4    1      ;   6.     Store 1
+16   2      ;   7.     Div 2
+13   2      ;   8.     Mult 2
+10   1      ;   9.     Sub 1
+24   12     ;   10.    JZero WRITE
+23   13     ;   11.    Jump DEC_WHILE
+
+            ; WRITE:
+21   1      ;   12.    Write 1
+
+            ; DEC_WHILE:
+2    3      ;   13.    Load 3
+9    1      ;   14.    Sub = 1
+4    3      ;   15.    Store 3
+23   3      ;   16.    Jump WHILE
+
+            ; END:
+0    0      ;   17.    Halt 0

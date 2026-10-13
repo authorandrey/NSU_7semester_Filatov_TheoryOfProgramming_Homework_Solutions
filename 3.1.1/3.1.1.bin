@@ -1,0 +1,18 @@
+18   1      ;   1.     Read 1
+18   2      ;   2.     Read 2
+18   3      ;   3.     Read 3
+2    3      ;   4.     Load 3
+24   14     ;   5.     JZero END
+
+            ; WHILE:
+2    1      ;   6.     Load 1
+10   2      ;   7.     Sub 2
+25   14     ;   8.     JGTZ END
+21   1      ;   9.     Write 1
+2    3      ;   10.    Load 3
+7    1      ;   11.    Add 1
+4    1      ;   12.    Store 1
+23   6      ;   13.    Jump WHILE
+
+            ; END:
+0    0      ;   14.    Halt 0

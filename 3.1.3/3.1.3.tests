@@ -1,0 +1,17 @@
+test_empty        : 0                     -> 1
+test_single       : 1 5                   -> 1
+test_two_equal    : 2 3 3                 -> 1
+test_two_diff     : 2 3 4                 -> 0
+test_three_pal    : 3 1 2 1               -> 1
+test_three_not    : 3 1 2 3               -> 0
+test_even_pal     : 4 1 2 2 1             -> 1
+test_even_not     : 4 1 2 3 1             -> 0
+test_odd_pal      : 5 7 8 9 8 7           -> 1
+test_odd_not      : 5 7 8 9 1 7           -> 0
+test_all_same     : 5 5 5 5 5 5           -> 1
+test_negative     : 4 -1 2 2 -1           -> 1
+test_negative_not : 4 -1 2 3 -1           -> 0
+test_large_pal    : 6 100 200 300 300 200 100 -> 1
+test_zero_single  : 1 0                   -> 1
+test_zero_pair    : 2 0 0                 -> 1
+test_zero_triple  : 3 0 1 0               -> 1
