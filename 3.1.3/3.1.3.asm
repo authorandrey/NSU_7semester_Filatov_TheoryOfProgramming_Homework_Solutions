@@ -61,9 +61,10 @@ END_FILL: Load =3
 	Load 1
 	Sub =1
 	Store 1	; last element of buf is at r{n+3-1}
-CHECK_LOOP: Load 1
-	Sub 2
+CHECK_LOOP: Load 2
+	Sub 1
 	JZero SUCCESS
+	JGTZ SUCCESS
 	Load *1
 	Sub *2
 	JZero MOVE_INDEXES
@@ -74,6 +75,7 @@ MOVE_INDEXES: Load 1
 	Load 2
 	Add =1
 	Store 2
+	Jump CHECK_LOOP
 SUCCESS: Write =1
 	Halt 0
 FAIL: Write =0
