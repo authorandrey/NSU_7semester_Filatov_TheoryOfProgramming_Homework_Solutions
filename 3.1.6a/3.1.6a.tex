@@ -1,0 +1,129 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2cm}
+
+\begin{document}
+
+\section*{Задача 3.1.6a}
+
+\textbf{Условие:} Отсортировать последовательность \(a_1, \dots, a_n\) в порядке возрастания методом пузырька.\\
+in: n, a1, ..., an \\
+out: b1, ..., bn
+
+\section*{Псевдокод}
+Я использую сортировку пузырьком-обменом с лекций
+\begin{verbatim}
+for i:=2 to n-1
+    for j:=n downto i
+        if a[j-1].key > a[j].key then 
+            a[j-1] :=: a[j]
+\end{verbatim}
+
+\section*{Решение}
+
+\begin{verbatim}
+Read 1      ; n
+Load =1
+Store 8     ; idx := 1
+
+READ_LOOP: Load 8
+    Sub 1
+    JGTZ INIT_SORT
+    Load 8
+    Add =9
+    Store 9
+    Read *9
+    Load 8
+    Add =1
+    Store 8
+    Jump READ_LOOP
+INIT_SORT: Load =2
+    Store 2     ; i := 2
+OUTER: Load 1
+    Sub 2
+    JGTZ INNER_INIT
+    JZero INNER_INIT
+    Jump PRINT_INIT
+INNER_INIT: Load 1
+    Store 3     ; j := n
+INNER: Load 3
+    Sub 2
+    JGTZ CHECK
+    JZero CHECK
+    Jump NEXT_I
+CHECK: Load 3
+    Add =9
+    Store 4     ; r4 := 9+j
+    Load *4
+    Store 7     ; r7 := a[j]
+    Load 4
+    Sub =1
+    Store 5     ; r5 := 9+j-1
+    Load *5
+    Store 6     ; r6 := a[j-1]
+    Load 6
+    Sub 7
+    JGTZ SWAP
+    Jump NO_SWAP
+SWAP: Load 6
+    Store *4    ; a[j] := a[j-1]
+    Load 7
+    Store *5    ; a[j-1] := a[j]
+NO_SWAP: Load 3
+    Sub =1
+    Store 3     ; j := j-1
+    Jump INNER
+NEXT_I: Load 2
+    Add =1
+    Store 2     ; i := i+1
+    Jump OUTER
+PRINT_INIT: Load =1
+    Store 8
+PRINT_LOOP: Load 8
+    Sub 1
+    JGTZ END
+    Load 8
+    Add =9
+    Store 9
+    Write *9
+    Load 8
+    Add =1
+    Store 8
+    Jump PRINT_LOOP
+END: Halt 0
+\end{verbatim}
+
+\section*{Сложность}
+
+Худший случай - массив, отсортированный по убыванию, тогда на каждой итерации внутреннего цикла выполняется swap.
+
+\begin{enumerate}
+    \item Инициализация - 3 шага
+    \item Цикл READ\_LOOP выполняется n раз. Каждая итерация занимает 11 шагов, выход из цикла - 3 шага. Итого: 11n +3
+    \item Инициализация сортировки - 2 шага
+    \item Внешний цикл OUTER: $i = 2 \dots n$ - n-1 итераций. Внутренний цикл INNER: $j = n \dots i$ - n-i+1 итераций
+    \begin{itemize}
+        \item Для \(j > i\) каждая итерация со swap - 24 шага
+        \item Для \(j = i\) - это последняя итерация внутреннего цикла - 25 шагов
+        \item Выход из внутреннего цикла - 5 шагов, переход к следующему i - 4 шага
+    \end{itemize}
+    Тогда время внешнего цикла:
+    \[
+        S = \sum_{i=2}^{n} \bigl[24(n-i) + 25 + 5 + 4\bigr] = \sum_{i=2}^{n} \bigl[24(n-i) + 34\bigr] = 12n^2 - 2n - 10.
+    \]
+    \item При i=n+1 - выход из цикла 5 шагов
+    \item PRINT\_INIT 2 шага
+    \item PRINT\_LOOP там точно также как в READ\_LOOP, 11n + 3
+    \item Halt 0 - 1 шаг
+\end{enumerate}
+
+Значит сложность в худшем случае:
+\[
+    T_{\max} = 3 + (11n + 3) + 2 + (12n^2 - 2n - 10) + 5 + 2 + (11n + 3) + 1 = 12n^2 + 20n + 9
+\]
+
+\end{document}

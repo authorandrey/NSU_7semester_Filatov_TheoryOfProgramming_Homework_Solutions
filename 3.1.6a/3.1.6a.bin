@@ -1,0 +1,92 @@
+18   1      ;   1.     Read 1
+1    1      ;   2.     Load = 1
+4    8      ;   3.     Store 8
+
+            ; READ_LOOP:
+2    8      ;   4.     Load 8
+10   1      ;   5.     Sub 1
+25   15     ;   6.     JGTZ INIT_SORT
+2    8      ;   7.     Load 8
+6    9      ;   8.     Add = 9
+4    9      ;   9.     Store 9
+19   9      ;   10.    Read * 9
+2    8      ;   11.    Load 8
+6    1      ;   12.    Add = 1
+4    8      ;   13.    Store 8
+23   4      ;   14.    Jump READ_LOOP
+
+            ; INIT_SORT:
+1    2      ;   15.    Load = 2
+4    2      ;   16.    Store 2
+
+            ; OUTER:
+2    1      ;   17.    Load 1
+10   2      ;   18.    Sub 2
+25   22     ;   19.    JGTZ INNER_INIT
+24   22     ;   20.    JZero INNER_INIT
+23   55     ;   21.    Jump PRINT_INIT
+
+            ; INNER_INIT:
+2    1      ;   22.    Load 1
+4    3      ;   23.    Store 3
+
+            ; INNER:
+2    3      ;   24.    Load 3
+10   2      ;   25.    Sub 2
+25   29     ;   26.    JGTZ DO_CHECK
+24   29     ;   27.    JZero DO_CHECK
+23   51     ;   28.    Jump NEXT_I
+
+            ; DO_CHECK:
+2    3      ;   29.    Load 3
+6    9      ;   30.    Add = 9
+4    4      ;   31.    Store 4
+3    4      ;   32.    Load * 4
+4    7      ;   33.    Store 7
+2    4      ;   34.    Load 4
+9    1      ;   35.    Sub = 1
+4    5      ;   36.    Store 5
+3    5      ;   37.    Load * 5
+4    6      ;   38.    Store 6
+2    6      ;   39.    Load 6
+10   7      ;   40.    Sub 7
+25   43     ;   41.    JGTZ SWAP
+23   47     ;   42.    Jump NO_SWAP
+
+            ; SWAP:
+2    6      ;   43.    Load 6
+5    4      ;   44.    Store * 4
+2    7      ;   45.    Load 7
+5    5      ;   46.    Store * 5
+
+            ; NO_SWAP:
+2    3      ;   47.    Load 3
+9    1      ;   48.    Sub = 1
+4    3      ;   49.    Store 3
+23   24     ;   50.    Jump INNER
+
+            ; NEXT_I:
+2    2      ;   51.    Load 2
+6    1      ;   52.    Add = 1
+4    2      ;   53.    Store 2
+23   17     ;   54.    Jump OUTER
+
+            ; PRINT_INIT:
+1    1      ;   55.    Load = 1
+4    8      ;   56.    Store 8
+
+            ; PRINT_LOOP:
+2    8      ;   57.    Load 8
+10   1      ;   58.    Sub 1
+25   68     ;   59.    JGTZ END
+2    8      ;   60.    Load 8
+6    9      ;   61.    Add = 9
+4    9      ;   62.    Store 9
+22   9      ;   63.    Write * 9
+2    8      ;   64.    Load 8
+6    1      ;   65.    Add = 1
+4    8      ;   66.    Store 8
+23   57     ;   67.    Jump PRINT_LOOP
+
+            ; END:
+0    0      ;   68.    Halt 0
