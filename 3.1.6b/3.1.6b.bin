@@ -1,0 +1,186 @@
+18   1      ;   1.     Read 1
+1    0      ;   2.     Load = 0
+10   1      ;   3.     Sub 1
+24   158    ;   4.     JZero END
+25   158    ;   5.     JGTZ END
+2    1      ;   6.     Load 1
+6    10     ;   7.     Add = 10
+4    2      ;   8.     Store 2
+1    10     ;   9.     Load = 10
+4    1      ;   10.    Store 1
+
+            ; READ_ARRAY:
+2    2      ;   11.    Load 2
+10   1      ;   12.    Sub 1
+24   19     ;   13.    JZero INIT_SORT
+19   1      ;   14.    Read * 1
+1    1      ;   15.    Load = 1
+7    1      ;   16.    Add 1
+4    1      ;   17.    Store 1
+23   11     ;   18.    Jump READ_ARRAY
+
+            ; INIT_SORT:
+1    1      ;   19.    Load = 1
+4    3      ;   20.    Store 3
+2    2      ;   21.    Load 2
+4    4      ;   22.    Store 4
+9    10     ;   23.    Sub = 10
+5    4      ;   24.    Store * 4
+2    4      ;   25.    Load 4
+6    2      ;   26.    Add = 2
+4    9      ;   27.    Store 9
+1    0      ;   28.    Load = 0
+5    9      ;   29.    Store * 9
+
+            ; SORT:
+2    4      ;   30.    Load 4
+6    1      ;   31.    Add = 1
+4    5      ;   32.    Store 5
+2    3      ;   33.    Load 3
+5    5      ;   34.    Store * 5
+3    4      ;   35.    Load * 4
+4    6      ;   36.    Store 6
+2    3      ;   37.    Load 3
+8    4      ;   38.    Add * 4
+15   2      ;   39.    Div = 2
+6    9      ;   40.    Add = 9
+3    0      ;   41.    Load * 0
+4    7      ;   42.    Store 7
+
+            ; REPEAT:
+23   44     ;   43.    Jump WHILE_i
+
+            ; WHILE_i:
+3    5      ;   44.    Load * 5
+6    9      ;   45.    Add = 9
+3    0      ;   46.    Load * 0
+10   7      ;   47.    Sub 7
+25   54     ;   48.    JGTZ WHILE_j
+24   54     ;   49.    JZero WHILE_j
+3    5      ;   50.    Load * 5
+6    1      ;   51.    Add = 1
+3    5      ;   52.    Load * 5
+23   44     ;   53.    Jump WHILE_i
+
+            ; WHILE_j:
+2    6      ;   54.    Load 6
+6    9      ;   55.    Add = 9
+3    0      ;   56.    Load * 0
+10   7      ;   57.    Sub 7
+12   -1     ;   58.    Mult = -1
+25   65     ;   59.    JGTZ IF_not_i_gt_j
+24   65     ;   60.    JZero IF_not_i_gt_j
+2    6      ;   61.    Load 6
+9    1      ;   62.    Sub = 1
+4    6      ;   63.    Store 6
+23   54     ;   64.    Jump WHILE_j
+
+            ; IF_not_i_gt_j:
+3    5      ;   65.    Load * 5
+10   6      ;   66.    Sub 6
+25   90     ;   67.    JGTZ UNTIL
+3    5      ;   68.    Load * 5
+6    9      ;   69.    Add = 9
+3    0      ;   70.    Load * 0
+4    8      ;   71.    Store 8
+3    5      ;   72.    Load * 5
+6    9      ;   73.    Add = 9
+4    1      ;   74.    Store 1
+2    6      ;   75.    Load 6
+6    9      ;   76.    Add = 9
+3    0      ;   77.    Load * 0
+5    1      ;   78.    Store * 1
+2    6      ;   79.    Load 6
+6    9      ;   80.    Add = 9
+4    1      ;   81.    Store 1
+2    8      ;   82.    Load 8
+5    1      ;   83.    Store * 1
+3    5      ;   84.    Load * 5
+6    1      ;   85.    Add = 1
+5    5      ;   86.    Store * 5
+2    6      ;   87.    Load 6
+9    1      ;   88.    Sub = 1
+4    6      ;   89.    Store 6
+
+            ; UNTIL:
+3    5      ;   90.    Load * 5
+10   6      ;   91.    Sub 6
+25   94     ;   92.    JGTZ IF_l_lt_j
+23   43     ;   93.    Jump REPEAT
+
+            ; IF_l_lt_j:
+2    3      ;   94.    Load 3
+10   6      ;   95.    Sub 6
+25   109    ;   96.    JGTZ IF_i_lt_r
+24   109    ;   97.    JZero IF_i_lt_r
+2    4      ;   98.    Load 4
+6    3      ;   99.    Add = 3
+2    4      ;   100.   Load 4
+2    6      ;   101.   Load 6
+5    4      ;   102.   Store * 4
+2    9      ;   103.   Load 9
+6    3      ;   104.   Add = 3
+4    9      ;   105.   Store 9
+1    1      ;   106.   Load = 1
+5    9      ;   107.   Store * 9
+23   30     ;   108.   Jump SORT
+
+            ; IF_i_lt_r:
+3    5      ;   109.   Load * 5
+11   4      ;   110.   Sub * 4
+25   131    ;   111.   JGTZ CALL_STACK_RETURN
+24   131    ;   112.   JZero CALL_STACK_RETURN
+3    4      ;   113.   Load * 4
+4    1      ;   114.   Store 1
+2    4      ;   115.   Load 4
+6    3      ;   116.   Add = 3
+4    4      ;   117.   Store 4
+2    1      ;   118.   Load 1
+5    4      ;   119.   Store * 4
+3    5      ;   120.   Load * 5
+4    3      ;   121.   Store 3
+2    5      ;   122.   Load 5
+6    3      ;   123.   Add = 3
+4    5      ;   124.   Store 5
+2    9      ;   125.   Load 9
+6    3      ;   126.   Add = 3
+4    9      ;   127.   Store 9
+1    2      ;   128.   Load = 2
+5    9      ;   129.   Store * 9
+23   30     ;   130.   Jump SORT
+
+            ; CALL_STACK_RETURN:
+3    9      ;   131.   Load * 9
+24   148    ;   132.   JZero PRINT_INIT
+2    4      ;   133.   Load 4
+9    3      ;   134.   Sub = 3
+4    4      ;   135.   Store 4
+2    5      ;   136.   Load 5
+9    3      ;   137.   Sub = 3
+4    5      ;   138.   Store 5
+3    9      ;   139.   Load * 9
+4    1      ;   140.   Store 1
+2    9      ;   141.   Load 9
+9    3      ;   142.   Sub = 3
+4    9      ;   143.   Store 9
+2    1      ;   144.   Load 1
+9    1      ;   145.   Sub = 1
+24   109    ;   146.   JZero IF_i_lt_r
+23   131    ;   147.   Jump CALL_STACK_RETURN
+
+            ; PRINT_INIT:
+1    10     ;   148.   Load = 10
+4    1      ;   149.   Store 1
+
+            ; PRINT:
+2    2      ;   150.   Load 2
+10   1      ;   151.   Sub 1
+24   158    ;   152.   JZero END
+22   1      ;   153.   Write * 1
+2    1      ;   154.   Load 1
+6    1      ;   155.   Add = 1
+4    1      ;   156.   Store 1
+23   150    ;   157.   Jump PRINT
+
+            ; END:
+0    0      ;   158.   Halt 0
