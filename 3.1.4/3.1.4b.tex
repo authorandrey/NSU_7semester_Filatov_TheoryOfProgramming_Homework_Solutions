@@ -1,0 +1,80 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2cm}
+
+\begin{document}
+
+\section*{Задача 3.1.4}
+
+\textbf{Условие:} Вывести двоичное представление десятичного числа. Least significant bit слева (0.5 балла).\\
+in: x (1 регистр) \\
+out: y (log2(x) регистров)
+
+\section*{Решение}
+
+\begin{verbatim}
+Read 1  ; x
+
+Load 1
+JZero END_0     ; x == 0 => Out: 0
+
+Load =3
+Store 2         ; r2 := 3 - reference to the [last + 1] cell of buffer
+
+WHILE: Load =0
+    Sub 1
+    JGTZ WRITE_RESULT
+    JZero WRITE_RESULT  ; exit if x <= 0
+    Load 1
+    Div =2
+    Mult =2
+    Sub 1
+    Mult =-1    ; r0 := x mod 2 = ((x // 2) * 2 - x) * -1
+    Store *2    ; buffer[r2] := r0
+    Load =1
+    Add 2
+    Store 2     ; r2 += 1
+    Load 1
+    Div =2
+    Store 1     ; x := x // 2
+    Jump WHILE
+WRITE_RESULT: Load =3
+    Sub 2
+    JZero END   ; r2 == 3, all the buffer was read
+    Load 2
+    Sub =1
+    Store 2     ; r2 -= 1
+    Write *2    ; OUT <- buffer[last]
+    Jump WRITE_RESULT
+END_0: Write =0
+END: Halt 0
+\end{verbatim}
+
+\section*{Сложность}
+
+Худшим случаем будет x > 0, тогда цикл будет выполняться столько раз, сколько бит в двоичном представлении x. Пусть $n := \lfloor \log_2 x \rfloor + 1$.
+
+\begin{enumerate}
+    \item Инициализация выполняется за 5 шагов
+    \item Первый цикл WHILE выполняется n раз
+    \item Каждая успешная итерация выполняется за 17 шагов
+    \item После n-й итерации выполняется ещё одна проверка условия - 4 шага
+    Итого на цикл \(17n + 4\) шагов
+    \item Второй цикл WRITE\_RESULT также выполняется n раз
+    \item Каждая успешная итерация выполняется за 8 шагов
+    \item После n-й итерации выполняется еще одна проверка условия - 3 шага
+    Итого на этот цикл \(8n + 3\) шагов
+    \item Halt 0 - 1 шаг
+\end{enumerate}
+
+Значит сложность в худшем случае:
+\[
+    T_{\max} = 5 + (17n + 4) + (8n + 3) + 1 = 25n + 13
+\]
+где $n = \lfloor \log_2 x \rfloor + 1$
+
+\end{document}

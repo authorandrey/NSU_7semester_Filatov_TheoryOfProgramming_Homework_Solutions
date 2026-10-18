@@ -1,0 +1,21 @@
+test_zero        : 0      -> 0
+test_one         : 1      -> 1
+test_two         : 2      -> 1 0
+test_three       : 3      -> 1 1
+test_four        : 4      -> 1 0 0
+test_five        : 5      -> 1 0 1
+test_six         : 6      -> 1 1 0
+test_seven       : 7      -> 1 1 1
+test_eight       : 8      -> 1 0 0 0
+test_nine        : 9      -> 1 0 0 1
+test_ten         : 10     -> 1 0 1 0
+test_fifteen     : 15     -> 1 1 1 1
+test_sixteen     : 16     -> 1 0 0 0 0
+test_thirty_one  : 31     -> 1 1 1 1 1
+test_thirty_two  : 32     -> 1 0 0 0 0 0
+test_255         : 255    -> 1 1 1 1 1 1 1 1
+test_256         : 256    -> 1 0 0 0 0 0 0 0 0
+test_1023        : 1023   -> 1 1 1 1 1 1 1 1 1 1
+test_1024        : 1024   -> 1 0 0 0 0 0 0 0 0 0 0
+test_12345       : 12345  -> 1 1 0 0 0 0 0 0 1 1 1 0 0 1
+test_1000000     : 1000000 -> 1 1 1 1 0 1 0 0 0 0 1 0 0 1 0 0 0 0 0 0
