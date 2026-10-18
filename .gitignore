@@ -1,3 +1,7 @@
 turing-machine-emulator.jar
 ram-machine-emulator.jar
 log.txt
+
+# latex
+*.aux
+*.log

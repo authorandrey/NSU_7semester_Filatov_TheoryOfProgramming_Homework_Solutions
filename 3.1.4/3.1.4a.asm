@@ -1,5 +1,8 @@
 Read 1	; x
 
+Load 1
+JZero END_0		; x == 0 => Out: 0
+
 WHILE: Load =0
 	Sub 1
 	JGTZ END
@@ -14,4 +17,5 @@ WHILE: Load =0
 	Div =2
 	Store 1		; x := x // 2
 	Jump WHILE
-END: Halt 0	
+END_0: Write =0
+END: Halt 0

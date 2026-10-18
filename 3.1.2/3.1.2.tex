@@ -1,0 +1,58 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2cm}
+
+\begin{document}
+
+\section*{Задача 3.1.2}
+
+\textbf{Условие:} Вывести числа в последовательности \(a_1, \dots, a_n\), которые делятся без остатка на \(d\) (0.5 балла):\\
+in: d, n, a1, ..., an \\
+out: b1, ..., bk
+
+\section*{Решение}
+
+\begin{verbatim}
+Read 2  ; d
+Read 3  ; n
+
+WHILE: Load 3
+    JZero END
+    Read 0
+    Store 1 ; r1 := a_n
+    Div 2
+    Mult 2
+    Sub 1
+    JZero WRITE
+    Jump DEC_WHILE
+WRITE: Write 1
+DEC_WHILE: Load 3
+    Sub =1
+    Store 3 ; r3--
+    Jump WHILE
+END: Halt 0
+\end{verbatim}
+
+\section*{Сложность}
+
+Худшего случая как такового нет, так как всегда программа работает за одно и то же число шагов. Например, если число делится на d, то происходит переход на WRITE с одной командой, а затем выполняется DEC\_WHILE. Если число не делится, то происходит шаг на команду Jump DEC\_WHILE, а затем выполняется DEC\_WHILE. Ну и так как критерий равномерный, то их сложность совпадает. Далее для определенности рассмотрим случай, когда все числа делятся на d.
+
+\begin{enumerate}
+    \item Команды до WHILE выполняются за 2 шага
+    \item Цикл выполняется n раз
+    \item Тело цикла выполняется за 8 шагов
+    \item Write 1 за 1 шаг
+    \item Декрементация за 4 шага
+    \item Последняя проверка условия (когда n==0) и остановка занимают 3 шага
+\end{enumerate}
+
+Значит, сложность в худшем случае:
+\[
+    T_{\max} = 13n + 5
+\]
+
+\end{document}

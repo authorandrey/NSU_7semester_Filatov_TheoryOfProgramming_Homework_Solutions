@@ -1,0 +1,59 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2cm}
+
+\begin{document}
+
+\section*{Задача 3.1.1}
+
+\textbf{Условие:} Вывести последовательность чисел от l до r с шагом s, если $r \ge l$:\\
+in: l, r, s \\
+out: l, l+s, ..., r
+
+\section*{Решение}
+
+\begin{verbatim}
+Read 1  ; l
+Read 2  ; r
+Read 3  ; s
+
+Load =0
+Sub 3
+JZero END
+JGTZ END   ; if s <= 0 then end program to prevent looping
+
+WHILE: Load 1
+    Sub 2  ; r0 := l + s*k - r, k - number of iteration
+    JGTZ END
+    Write 1 ; OUT <- r1 = l + s*k
+    Load 3
+    Add 1
+    Store 1 ; r1 := r1 + r3
+    Jump WHILE
+END: Halt 0
+\end{verbatim}
+
+\section*{Сложность}
+
+\begin{enumerate}
+    \item Команды до WHILE выполняются за 7 шагов
+    \item Цикл выполняется K раз, где K - количество выводимых элементов
+    \item Тело цикла выполняется за 8 шагов
+    \item Последняя проверка условия и остановка занимают 4 шага
+\end{enumerate}
+
+Всего надо вывести элементов:
+\[
+    K = \left\lfloor \frac{r - l}{s} \right\rfloor + 1
+\]
+
+Значит, сложность в худшем случае:
+\[
+    T_{\max} = 8K + 11 = 8\left\lfloor \frac{r - l}{s} \right\rfloor + 19
+\]
+
+\end{document}

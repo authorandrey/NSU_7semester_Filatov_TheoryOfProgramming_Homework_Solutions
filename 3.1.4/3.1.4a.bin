@@ -1,20 +1,25 @@
 18   1      ;   1.     Read 1
+2    1      ;   2.     Load 1
+24   18     ;   3.     JZero END_0
 
             ; WHILE:
-1    0      ;   2.     Load = 0
-10   1      ;   3.     Sub 1
-25   16     ;   4.     JGTZ END
-24   16     ;   5.     JZero END
-2    1      ;   6.     Load 1
-15   2      ;   7.     Div = 2
-12   2      ;   8.     Mult = 2
-10   1      ;   9.     Sub 1
-12   -1     ;   10.    Mult = -1
-21   0      ;   11.    Write 0
-2    1      ;   12.    Load 1
-15   2      ;   13.    Div = 2
-4    1      ;   14.    Store 1
-23   2      ;   15.    Jump WHILE
+1    0      ;   4.     Load = 0
+10   1      ;   5.     Sub 1
+25   19     ;   6.     JGTZ END
+24   19     ;   7.     JZero END
+2    1      ;   8.     Load 1
+15   2      ;   9.     Div = 2
+12   2      ;   10.    Mult = 2
+10   1      ;   11.    Sub 1
+12   -1     ;   12.    Mult = -1
+21   0      ;   13.    Write 0
+2    1      ;   14.    Load 1
+15   2      ;   15.    Div = 2
+4    1      ;   16.    Store 1
+23   4      ;   17.    Jump WHILE
+
+            ; END_0:
+20   0      ;   18.    Write = 0
 
             ; END:
-0    0      ;   16.    Halt 0
+0    0      ;   19.    Halt 0

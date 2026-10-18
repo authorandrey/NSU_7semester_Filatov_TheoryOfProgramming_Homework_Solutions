@@ -12,7 +12,7 @@
 ;	call ReadInt
 ;	mov edi, eax	; s
 ;
-;	.IF edi == 0
+;	.IF SDWORD ptr edi <= 0
 ;		ret
 ;	.ENDIF
 ;	
@@ -31,8 +31,10 @@ Read 1	; l
 Read 2	; r
 Read 3	; s
 
-Load 3
+Load =0
+Sub 3
 JZero END
+JGTZ END 	; if s <= 0 then end program to prevent looping
 
 WHILE: Load 1
 	Sub 2	; r0 := l + s*k - r, k - number of iteration

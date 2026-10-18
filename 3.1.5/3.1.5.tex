@@ -1,0 +1,67 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2cm}
+
+\begin{document}
+
+\section*{Задача 3.1.5}
+
+\textbf{Условие:} Определить, является ли последовательность \(a_1, \dots, a_n\) отсортированной в порядке возрастания элементов, то есть \(a_1 \le \dots \le a_n\). Вывести 1, если является, или 0, если не является (0.5 балла):\\
+in: n, a1, ..., an \\
+out: r in \{0,1\}
+
+\section*{Решение}
+
+\begin{verbatim}
+Read 1  ; n
+Load =0
+Sub 1
+JZero SUCCESS   ; n = 0
+JGTZ SUCCESS    ; n < 0
+
+Read 2  ; a_i
+
+Load 1
+Sub =1
+Store 1 ; n := n-1
+
+WHILE: Load 1
+    JZero SUCCESS
+    Read 3  ; r3 := a_{i+1}
+    Load 2
+    Sub 3   ; r0 := a_i - a_{i+1}
+    JGTZ FAIL
+    Load 1
+    Sub =1
+    Store 1 ; n := n-1
+    Load 3
+    Store 2 ; r2 := a_{i+1}
+    Jump WHILE
+SUCCESS: Write =1
+    Halt 0
+FAIL: Write =0
+    Halt 0
+\end{verbatim}
+
+\section*{Сложность}
+
+Худший случай - уже отсортированная по возрастанию последовательность длины $n > 0$, так как тогда выполняется максимальное количество сравнений.
+
+\begin{enumerate}
+    \item Инициализация выполняется ровно за 9 шагов
+    \item Цикл WHILE для проверки пар элементов выполняется n-1 раз
+    \item На каждой успешной итерации выполняется 12 шагов
+    \item На n-й итерации выполняется проверка условия - 2 шага
+    \item SUCCESS занимает 2 шага
+\end{enumerate}
+
+Значит сложность в худшем случае:
+\[
+    T_{\max}(n) = 9 + 12(n - 1) + 2 + 2 = 12n + 1
+\]
+
+\end{document}

@@ -1,0 +1,61 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2cm}
+
+\begin{document}
+
+\section*{Задача 3.1.4}
+
+\textbf{Условие:} Вывести двоичное представление десятичного числа. Least significant bit справа (0.5 балла).\\
+in: x (1 регистр) \\
+out: y (log2(x) регистров)
+
+\section*{Решение}
+
+\begin{verbatim}
+Read 1  ; x
+
+Load 1
+JZero END_0     ; x == 0 => Out: 0
+
+WHILE: Load =0
+    Sub 1
+    JGTZ END
+    JZero END   ; exit if x <= 0
+    Load 1
+    Div =2
+    Mult =2
+    Sub 1
+    Mult =-1    ; r0 := x mod 2 = ((x // 2) * 2 - x) * -1
+    Write 0
+    Load 1
+    Div =2
+    Store 1     ; x := x // 2
+    Jump WHILE
+END_0: Write =0
+END: Halt 0
+\end{verbatim}
+
+\section*{Сложность}
+
+Тут мы не рассматриваем $x < 0$ (на паре сказали, что не надо и что это можно понять по тому, что нужно вывести log2(x) регистров). Худший случай - $x > 0$, тогда цикл будет выполняться столько раз, сколько бит в двоичном представлении x. Пусть \(n := \lfloor \log_2 x \rfloor + 1\).
+
+\begin{enumerate}
+    \item Инициализация за 3 шага
+    \item Цикл WHILE выполняется n раз
+    \item Каждая успешная итерация выполняется за 14 шагов
+    \item После n-й итерации выполняется ещё одна проверка условия - 4 шага
+    \item Halt 0 - 1 шаг
+\end{enumerate}
+
+Значит сложность в худшем случае:
+\[
+    T_{\max} = 3 + 14n + 4 + 1 = 14n + 8
+\]
+где $n = \lfloor \log_2 x \rfloor + 1$
+
+\end{document}
