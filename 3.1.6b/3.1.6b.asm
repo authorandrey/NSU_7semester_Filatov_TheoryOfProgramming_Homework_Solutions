@@ -83,7 +83,7 @@ WHILE_i: Load *5    ; r0 := i
     JZero WHILE_j   ; if a[i] - x >= 0 end while
     Load *5
     Add =1
-    Load *5         ; i++
+    Store *5         ; i++
     Jump WHILE_i
 WHILE_j: Load 6     ; r0 := j
     Add =9          ; r0 := &a[j]
@@ -132,7 +132,7 @@ IF_l_lt_j: Load 3
     ; l = l
     Load 4
     Add =3
-    Load 4          ; r4 := &r + 3 (next r)
+    Store 4          ; r4 := &r + 3 (next r)
     Load 6
     Store *4        ; r := j
     Load 9
