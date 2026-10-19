@@ -1,0 +1,13 @@
+test_single        : 1            -> 1
+test_two           : 2            -> 4
+test_three         : 3            -> 27
+test_four          : 4            -> 256
+test_five          : 5            -> 3125
+test_six           : 6            -> 46656
+test_seven         : 7            -> 823543
+test_eight         : 8            -> 16777216
+test_nine          : 9            -> 387420489
+test_ten           : 10           -> 10000000000
+test_eleven        : 11           -> 285311670611
+test_twelve        : 12           -> 8916100448256
+test_thirteen      : 13           -> 302875106592253
