@@ -1,0 +1,254 @@
+18   3      ;   1.     Read 3
+1    2      ;   2.     Load = 2
+10   3      ;   3.     Sub 3
+25   207    ;   4.     JGTZ RET_FALSE
+1    2      ;   5.     Load = 2
+4    12     ;   6.     Store 12
+1    3      ;   7.     Load = 3
+4    13     ;   8.     Store 13
+1    5      ;   9.     Load = 5
+4    14     ;   10.    Store 14
+1    7      ;   11.    Load = 7
+4    15     ;   12.    Store 15
+1    11     ;   13.    Load = 11
+4    16     ;   14.    Store 16
+1    13     ;   15.    Load = 13
+4    17     ;   16.    Store 17
+1    17     ;   17.    Load = 17
+4    18     ;   18.    Store 18
+1    19     ;   19.    Load = 19
+4    19     ;   20.    Store 19
+1    23     ;   21.    Load = 23
+4    20     ;   22.    Store 20
+1    29     ;   23.    Load = 29
+4    21     ;   24.    Store 21
+1    31     ;   25.    Load = 31
+4    22     ;   26.    Store 22
+1    37     ;   27.    Load = 37
+4    23     ;   28.    Store 23
+1    2      ;   29.    Load = 2
+4    24     ;   30.    Store 24
+1    325    ;   31.    Load = 325
+4    25     ;   32.    Store 25
+1    9375   ;   33.    Load = 9375
+4    26     ;   34.    Store 26
+1    28178   ;   35.    Load = 28178
+4    27     ;   36.    Store 27
+1    450775   ;   37.    Load = 450775
+4    28     ;   38.    Store 28
+1    9780504   ;   39.    Load = 9780504
+4    29     ;   40.    Store 29
+1    1795265022   ;   41.    Load = 1795265022
+4    30     ;   42.    Store 30
+1    18446744073709551616   ;   43.    Load = 18446744073709551616
+4    31     ;   44.    Store 31
+1    12     ;   45.    Load = 12
+4    1      ;   46.    Store 1
+
+            ; FOR_SMALL:
+1    24     ;   47.    Load = 24
+10   1      ;   48.    Sub 1
+24   66     ;   49.    JZero CALL_MILLER_RABIN
+3    1      ;   50.    Load * 1
+4    4      ;   51.    Store 4
+2    3      ;   52.    Load 3
+16   4      ;   53.    Div 4
+13   4      ;   54.    Mult 4
+10   3      ;   55.    Sub 3
+12   -1     ;   56.    Mult = -1
+24   62     ;   57.    JZero N_eq_P
+2    1      ;   58.    Load 1
+6    1      ;   59.    Add = 1
+4    1      ;   60.    Store 1
+23   47     ;   61.    Jump FOR_SMALL
+
+            ; N_eq_P:
+2    3      ;   62.    Load 3
+10   4      ;   63.    Sub 4
+24   209    ;   64.    JZero RET_TRUE
+23   207    ;   65.    Jump RET_FALSE
+
+            ; CALL_MILLER_RABIN:
+2    3      ;   66.    Load 3
+9    1      ;   67.    Sub = 1
+4    5      ;   68.    Store 5
+1    0      ;   69.    Load = 0
+4    6      ;   70.    Store 6
+
+            ; WHILE_d_mod_2:
+2    5      ;   71.    Load 5
+15   2      ;   72.    Div = 2
+12   2      ;   73.    Mult = 2
+10   5      ;   74.    Sub 5
+12   -1     ;   75.    Mult = -1
+24   78     ;   76.    JZero WHILE_d_mod_2_EXEC
+23   85     ;   77.    Jump FOR_MR_BASES_INIT
+
+            ; WHILE_d_mod_2_EXEC:
+2    5      ;   78.    Load 5
+15   2      ;   79.    Div = 2
+4    5      ;   80.    Store 5
+2    6      ;   81.    Load 6
+6    1      ;   82.    Add = 1
+4    6      ;   83.    Store 6
+23   71     ;   84.    Jump WHILE_d_mod_2
+
+            ; FOR_MR_BASES_INIT:
+1    24     ;   85.    Load = 24
+4    1      ;   86.    Store 1
+
+            ; FOR_MR_BASES:
+1    31     ;   87.    Load = 31
+10   1      ;   88.    Sub 1
+24   171    ;   89.    JZero MR_RET_TRUE
+3    1      ;   90.    Load * 1
+4    7      ;   91.    Store 7
+16   3      ;   92.    Div 3
+13   3      ;   93.    Mult 3
+10   7      ;   94.    Sub 7
+12   -1     ;   95.    Mult = -1
+4    7      ;   96.    Store 7
+24   164    ;   97.    JZero FOR_MR_BASES_CONTINUE
+2    7      ;   98.    Load 7
+4    9      ;   99.    Store 9
+2    5      ;   100.   Load 5
+4    10     ;   101.   Store 10
+
+            ; MOD_POW:
+1    1      ;   102.   Load = 1
+4    11     ;   103.   Store 11
+
+            ; MOD_POW_WHILE:
+1    0      ;   104.   Load = 0
+10   10     ;   105.   Sub 10
+24   136    ;   106.   JZero FOR_MR_BASES_IF_OR
+25   136    ;   107.   JGTZ FOR_MR_BASES_IF_OR
+2    10     ;   108.   Load 10
+15   2      ;   109.   Div = 2
+12   2      ;   110.   Mult = 2
+10   10     ;   111.   Sub 10
+12   -1     ;   112.   Mult = -1
+9    1      ;   113.   Sub = 1
+24   116    ;   114.   JZero MOD_POW_WHILE_IF_BODY
+23   124    ;   115.   Jump MOD_POW_WHILE_END
+
+            ; MOD_POW_WHILE_IF_BODY:
+2    11     ;   116.   Load 11
+13   9      ;   117.   Mult 9
+4    2      ;   118.   Store 2
+16   3      ;   119.   Div 3
+13   3      ;   120.   Mult 3
+10   2      ;   121.   Sub 2
+12   -1     ;   122.   Mult = -1
+4    11     ;   123.   Store 11
+
+            ; MOD_POW_WHILE_END:
+2    9      ;   124.   Load 9
+13   9      ;   125.   Mult 9
+4    2      ;   126.   Store 2
+16   3      ;   127.   Div 3
+13   3      ;   128.   Mult 3
+10   2      ;   129.   Sub 2
+12   -1     ;   130.   Mult = -1
+4    9      ;   131.   Store 9
+2    10     ;   132.   Load 10
+15   2      ;   133.   Div = 2
+4    10     ;   134.   Store 10
+23   104    ;   135.   Jump MOD_POW_WHILE
+
+            ; FOR_MR_BASES_IF_OR:
+2    11     ;   136.   Load 11
+4    8      ;   137.   Store 8
+9    1      ;   138.   Sub = 1
+24   164    ;   139.   JZero FOR_MR_BASES_CONTINUE
+2    8      ;   140.   Load 8
+10   3      ;   141.   Sub 3
+6    1      ;   142.   Add = 1
+24   164    ;   143.   JZero FOR_MR_BASES_CONTINUE
+
+            ; FOR_MR_BASES_FOR_INIT:
+2    6      ;   144.   Load 6
+9    1      ;   145.   Sub = 1
+4    2      ;   146.   Store 2
+
+            ; FOR_MR_BASES_FOR:
+2    2      ;   147.   Load 2
+24   168    ;   148.   JZero MR_RET_FALSE
+2    8      ;   149.   Load 8
+13   8      ;   150.   Mult 8
+4    32     ;   151.   Store 32
+16   3      ;   152.   Div 3
+13   3      ;   153.   Mult 3
+10   32     ;   154.   Sub 32
+12   -1     ;   155.   Mult = -1
+4    8      ;   156.   Store 8
+10   3      ;   157.   Sub 3
+6    1      ;   158.   Add = 1
+24   164    ;   159.   JZero FOR_MR_BASES_CONTINUE
+2    2      ;   160.   Load 2
+9    1      ;   161.   Sub = 1
+4    2      ;   162.   Store 2
+23   147    ;   163.   Jump FOR_MR_BASES_FOR
+
+            ; FOR_MR_BASES_CONTINUE:
+2    1      ;   164.   Load 1
+6    1      ;   165.   Add = 1
+4    1      ;   166.   Store 1
+23   87     ;   167.   Jump FOR_MR_BASES
+
+            ; MR_RET_FALSE:
+1    0      ;   168.   Load = 0
+4    8      ;   169.   Store 8
+23   173    ;   170.   Jump IF_LIM
+
+            ; MR_RET_TRUE:
+1    1      ;   171.   Load = 1
+4    8      ;   172.   Store 8
+
+            ; IF_LIM:
+2    31     ;   173.   Load 31
+10   3      ;   174.   Sub 3
+25   181    ;   175.   JGTZ IF_LIM_RET
+2    8      ;   176.   Load 8
+24   207    ;   177.   JZero RET_FALSE
+1    41     ;   178.   Load = 41
+4    5      ;   179.   Store 5
+23   184    ;   180.   Jump WHILE
+
+            ; IF_LIM_RET:
+2    8      ;   181.   Load 8
+24   207    ;   182.   JZero RET_FALSE
+23   209    ;   183.   Jump RET_TRUE
+
+            ; WHILE:
+2    5      ;   184.   Load 5
+13   5      ;   185.   Mult 5
+10   3      ;   186.   Sub 3
+25   209    ;   187.   JGTZ RET_TRUE
+2    3      ;   188.   Load 3
+16   5      ;   189.   Div 5
+13   5      ;   190.   Mult 5
+10   3      ;   191.   Sub 3
+12   -1     ;   192.   Mult = -1
+24   207    ;   193.   JZero RET_FALSE
+2    5      ;   194.   Load 5
+6    2      ;   195.   Add = 2
+4    1      ;   196.   Store 1
+2    3      ;   197.   Load 3
+16   1      ;   198.   Div 1
+13   1      ;   199.   Mult 1
+10   3      ;   200.   Sub 3
+12   -1     ;   201.   Mult = -1
+24   207    ;   202.   JZero RET_FALSE
+2    5      ;   203.   Load 5
+6    6      ;   204.   Add = 6
+4    5      ;   205.   Store 5
+23   184    ;   206.   Jump WHILE
+
+            ; RET_FALSE:
+20   0      ;   207.   Write = 0
+0    0      ;   208.   Halt 0
+
+            ; RET_TRUE:
+20   1      ;   209.   Write = 1
+0    0      ;   210.   Halt 0

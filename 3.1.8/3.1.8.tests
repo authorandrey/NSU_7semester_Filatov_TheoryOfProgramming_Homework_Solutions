@@ -1,0 +1,11 @@
+test_two            : 2           -> 1
+test_three          : 3           -> 1
+test_four           : 4           -> 0
+test_five           : 5           -> 1
+test_nine           : 9           -> 0
+test_small_prime    : 97          -> 1
+test_square         : 49          -> 0
+test_large_prime    : 9973        -> 1
+test_large_composite: 9999        -> 0
+test_power_of_two   : 1024        -> 0
+test_mersenne_prime : 2147483647  -> 1
