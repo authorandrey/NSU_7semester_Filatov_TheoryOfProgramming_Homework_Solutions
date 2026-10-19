@@ -1,0 +1,11 @@
+test_single        : 1 42                     -> 42
+test_two_sorted    : 2 1 2                    -> 1 2
+test_two_unsorted  : 2 2 1                    -> 1 2
+test_sorted        : 5 1 2 3 4 5              -> 1 2 3 4 5
+test_reverse       : 5 5 4 3 2 1              -> 1 2 3 4 5
+test_duplicates    : 6 2 3 2 1 3 1            -> 1 1 2 2 3 3
+test_negative      : 4 -1 -3 0 -2             -> -3 -2 -1 0
+test_mixed         : 6 5 -2 0 3 -1 1          -> -2 -1 0 1 3 5
+test_all_same      : 4 7 7 7 7                -> 7 7 7 7
+test_three_reverse : 3 3 2 1                  -> 1 2 3
+test_four_mixed    : 4 4 1 3 2                -> 1 2 3 4

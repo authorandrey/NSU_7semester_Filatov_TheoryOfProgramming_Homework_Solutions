@@ -1,0 +1,48 @@
+18   2      ;   1.     Read 2
+1    0      ;   2.     Load = 0
+10   2      ;   3.     Sub 2
+24   36     ;   4.     JZero END
+25   36     ;   5.     JGTZ END
+
+            ; READ_DATA:
+2    2      ;   6.     Load 2
+24   19     ;   7.     JZero PRINT_INIT
+18   1      ;   8.     Read 1
+2    1      ;   9.     Load 1
+6    103    ;   10.    Add = 103
+4    1      ;   11.    Store 1
+3    0      ;   12.    Load * 0
+6    1      ;   13.    Add = 1
+5    1      ;   14.    Store * 1
+2    2      ;   15.    Load 2
+9    1      ;   16.    Sub = 1
+4    2      ;   17.    Store 2
+23   6      ;   18.    Jump READ_DATA
+
+            ; PRINT_INIT:
+1    3      ;   19.    Load = 3
+4    1      ;   20.    Store 1
+
+            ; PRINT:
+1    204    ;   21.    Load = 204
+10   1      ;   22.    Sub 1
+24   36     ;   23.    JZero END
+2    1      ;   24.    Load 1
+9    103    ;   25.    Sub = 103
+4    2      ;   26.    Store 2
+3    1      ;   27.    Load * 1
+
+            ; PRINT_NUM:
+24   32     ;   28.    JZero PRINT_AFTER_NUM
+21   2      ;   29.    Write 2
+9    1      ;   30.    Sub = 1
+23   28     ;   31.    Jump PRINT_NUM
+
+            ; PRINT_AFTER_NUM:
+2    1      ;   32.    Load 1
+6    1      ;   33.    Add = 1
+4    1      ;   34.    Store 1
+23   21     ;   35.    Jump PRINT
+
+            ; END:
+0    1      ;   36.    Halt 1
