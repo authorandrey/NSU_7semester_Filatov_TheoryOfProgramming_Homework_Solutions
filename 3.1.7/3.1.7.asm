@@ -1,16 +1,13 @@
-;def fast_power(n):
-;    result = 1
-;    base = n
-;    exp = n
-;
-;    while exp > 0:
-;        if exp % 2 == 1:
-;            result *= base
-;
-;        base *= base
-;        exp //= 2
-;
-;    return result
+;long long binpow(long long base, long long exp) {
+;    long long res = 1;
+;    while (exp > 0) {
+;        if (exp % 2 == 1)
+;            res *= base;
+;        base *= base;
+;        exp /= 2;
+;    }
+;    return res;
+;}
 
 
 ; Data Model

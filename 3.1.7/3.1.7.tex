@@ -1,0 +1,108 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2cm}
+
+\begin{document}
+
+\section*{Задача 3.1.7}
+
+\textbf{Условие:} Алгоритм быстрого возведения в степень.\
+\texttt{in:} $n$\\
+\texttt{out:} $n^n$
+
+\section*{Псевдокод}
+Источник: https://github.com/cp-algorithms/cp-algorithms/blob/main/src/algebra/binary-exp.md
+\begin{verbatim}
+long long binpow(long long base, long long exp) {
+    long long res = 1;
+    while (exp > 0) {
+        if (exp % 2 == 1)
+            res *= base;
+        base *= base;
+        exp /= 2;
+    }
+    return res;
+}
+\end{verbatim}
+
+\section*{Решение}
+
+\begin{verbatim}
+; Data Model
+;0: r0
+;1: result
+;2: base
+;3: exp
+
+Load =0
+Read 2
+Sub 2
+JZero END   ; 0^0 - invalid input
+JGTZ END    ; (-a)^{-a} = 1 / (-a)^a = 0|1|-1. Suppoze n < 0 - invalid input
+
+Load =1
+Store 1     ; result := 1
+Load 2
+Store 3     ; exp := n
+
+WHILE: Load =0
+    Sub 3
+    JZero END
+    JGTZ END    ; if exp <= 0 (-exp >= 0) then return result
+    Load 3      ; r0 := exp
+    Div =2
+    Mult =2
+    Sub 3
+    Mult =-1    ; r0 := ((exp // 2) * 2 - exp) * (-1) = exp % 2
+    Sub =1
+    JZero MULT_RES  ; if exp%2==1 then result *= base
+    Jump WHILE_END
+MULT_RES: Load 1
+    Mult 2
+    Store 1     ; result *= base
+WHILE_END: Load 2
+    Mult 2
+    Store 2     ; base *= base
+    Load 3
+    Div =2
+    Store 3     ; exp //= 2
+    Jump WHILE
+END: Write 1
+    Halt 0
+\end{verbatim}
+
+\section*{Сложность}
+
+Допустимый вход задачи - $n\geq 1$. Для $n\leq 0$ программа заканчивает работу без ответа.
+
+Пусть
+\[
+ k:=\lfloor\log_2 n\rfloor+1
+\]
+- длина двоичной записи $n$, а $p$ - количество единиц в его двоичной записи.
+
+Цикл WHILE проводится пока $exp>0$ и на каждом шаге exp //= 2, то есть shr exp. Значит цикл будет пройден $k$ раз. Заход в тело IF будет происходить $p$ раз. Значит худшим случаем будет $p=k$, то есть когда $n_{10}=1\dots1_2$.
+
+\begin{enumerate}
+    \item Проверка входа - $5$ шагов
+    \item Инициализация - $4$ шага
+    \item Тело цикла выполняется $k$ раз
+    \begin{enumerate}
+        \item На каждой итерации проверка условия - $4$ шага, (exp \% 2 == 1) - $7$ шагов
+        \item Так как $p=k$, то (exp \% 2 == 1) всегда. Значит + 3 шага от MULT\_RES
+        \item WHILE\_END - $7$ шагов
+    \end{enumerate}
+    \item Финальная проверка условия цикла - 3 шага
+    \item END - 2 шага
+\end{enumerate}
+
+Значит, сложность в худшем случае:
+\[
+    T_{\max}(n) = 5+4+k(4 + 7 + 3 + 7) + 3 + 2 = 21k + 14 = 21(\lfloor\log_2 n\rfloor+1) + 14
+\]
+
+\end{document}
