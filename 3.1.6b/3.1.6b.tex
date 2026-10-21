@@ -1,0 +1,283 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2cm}
+
+\begin{document}
+
+\section*{Задача 3.1.6f}
+
+\textbf{Условие:} Отсортировать последовательность $a_1,\ldots,a_n$ в порядке возрастания элементов.
+
+\texttt{in:} $n,a_1,\ldots,a_n$\\
+\texttt{out:} $b_1,\ldots,b_n$, где $b_1\leq\cdots\leq b_n$
+
+\section*{Псевдокод}
+\begin{verbatim}
+procedure sort(l, r: longint);
+var
+    i, j, x, y: longint;
+begin
+    i := l;
+    j := r;
+    x := a[(l+r) div 2];
+    repeat
+        while a[i] < x do
+            inc(i);
+        while x < a[j] do
+            dec(j);
+        if not (i > j) then
+        begin
+            y := a[i];
+            a[i] := a[j];
+            a[j] := y;
+            inc(i);
+            j := j - 1;
+        end;
+    until i > j;
+    if l < j then
+        sort(l, j);
+    if i < r then
+        sort(i, r);
+end;
+
+begin
+    max := len(array);
+    sort(1, max);
+end;
+\end{verbatim}
+
+\section*{Решение}
+
+\begin{verbatim}
+Read 1
+Load =0
+Sub 1
+JZero END
+JGTZ END    ; n <= 0 ==> end
+Load 1
+Add =10
+Store 2     ; r2 := 10 + n, end of array + 1
+
+Load =10
+Store 1     ; r1 := 10, start of array. And also r1 is a helping register
+
+READ_ARRAY: Load 2
+    Sub 1
+    JZero INIT_SORT ; r1 == r2 => end read
+    Read *1         ; buf[r1] <- In
+    Load =1
+    Add 1
+    Store 1         ; r1 += 1
+    Jump READ_ARRAY
+INIT_SORT: Load =1
+    Store 3         ; r3 := l = 1
+    Load 2
+    Store 4         ; r4 := &r = 10 + n
+    Sub =10
+    Store *4        ; r (= *r4) := n
+    Load 4
+    Add =2
+    Store 9         ; r9 := &cs
+    Load =0
+    Store *9        ; cs := 0 (call from MAIN)
+SORT: Load 4
+    Add =1
+    Store 5         ; r5 := &i = &r + 1 (next i on call stack)
+    Load 3
+    Store *5        ; i (= *r5) := l
+    Load *4
+    Store 6         ; r6 := j = last r on call stack
+    Load 3
+    Add *4
+    Div =2          ; r0 := (l+r) // 2
+    Add =9          ; r0 := &a[(l+r) // 2]
+    Load *0
+    Store 7         ; r7 := x = a[(l+r) // 2]
+REPEAT: Jump WHILE_i
+WHILE_i: Load *5
+    Add =9
+    Load *0
+    Sub 7
+    JGTZ WHILE_j
+    JZero WHILE_j
+    Load *5
+    Add =1
+    Store *5
+    Jump WHILE_i
+WHILE_j: Load 6
+    Add =9
+    Load *0
+    Sub 7
+    Mult =-1
+    JGTZ IF_not_i_gt_j
+    JZero IF_not_i_gt_j
+    Load 6
+    Sub =1
+    Store 6
+    Jump WHILE_j
+IF_not_i_gt_j: Load *5
+    Sub 6
+    JGTZ UNTIL
+    Load *5
+    Add =9
+    Load *0
+    Store 8
+    Load *5
+    Add =9
+    Store 1
+    Load 6
+    Add =9
+    Load *0
+    Store *1
+    Load 6
+    Add =9
+    Store 1
+    Load 8
+    Store *1
+    Load *5
+    Add =1
+    Store *5
+    Load 6
+    Sub =1
+    Store 6
+UNTIL: Load *5
+    Sub 6
+    JGTZ IF_l_lt_j
+    Jump REPEAT
+IF_l_lt_j: Load 3
+    Sub 6
+    JGTZ IF_i_lt_r
+    JZero IF_i_lt_r
+    Load 4
+    Add =3
+    Store 4
+    Load 6
+    Store *4
+    Load 9
+    Add =3
+    Store 9
+    Load =1
+    Store *9
+    Jump SORT
+IF_i_lt_r: Load *5
+    Sub *4
+    JGTZ CALL_STACK_RETURN
+    JZero CALL_STACK_RETURN
+    Load *4
+    Store 1
+    Load 4
+    Add =3
+    Store 4
+    Load 1
+    Store *4
+    Load *5
+    Store 3
+    Load 5
+    Add =3
+    Store 5
+    Load 9
+    Add =3
+    Store 9
+    Load =2
+    Store *9
+    Jump SORT
+CALL_STACK_RETURN: Load *9
+    JZero PRINT_INIT
+    Load 4
+    Sub =3
+    Store 4
+    Load 5
+    Sub =3
+    Store 5
+    Load *9
+    Store 1
+    Load 9
+    Sub =3
+    Store 9
+    Load 1
+    Sub =1
+    JZero IF_i_lt_r
+    Jump CALL_STACK_RETURN
+PRINT_INIT: Load =10
+    Store 1
+PRINT: Load 2
+    Sub 1
+    JZero END
+    Write *1
+    Load 1
+    Add =1
+    Store 1
+    Jump PRINT
+END: Halt 0
+\end{verbatim}
+
+\section*{Сложность}
+
+Рассматриваем допустимый вход $n\geq 1$. Все команды RAM, включая чтение, запись, переходы и обслуживание стека вызовов, считаются за один шаг.
+
+До вызова \texttt{SORT} выполняется $8n+24$ шагов:
+\begin{enumerate}
+    \item Проверка $n$ и подготовка адресов — $10$ шагов.
+    \item Чтение массива — $8n+3$ шага.
+    \item Инициализация сортировки и стека — $11$ шагов.
+\end{enumerate}
+
+После завершения сортировки подготовка вывода, вывод массива и остановка занимают $8n+6$ шагов. Следовательно, суммарные затраты вне \texttt{SORT} равны
+\[
+    T_{\mathrm{outside}}(n)=16n+30.
+\]
+
+Стоимость разбиения зависит от входного массива. В худшем суммарном случае для отрезка длины $m\geq 5$ опорный элемент является минимальным: разбиение оставляет правую подзадачу длины $m-1$. Само разбиение занимает $11m+41$ шаг. С учётом подготовки вызова, проверок и возврата такой уровень рекурсии добавляет
+\[
+    13+(11m+41)+8+18+17=11m+97
+\]
+шагов к стоимости оставшейся подзадачи.
+
+Для отрезка длины $4$ максимальная суммарная стоимость достигается при разбиении с двумя обменами: получаются две подзадачи длины $2$. Разбиение занимает $85$ шагов. Каждая подзадача длины $2$ занимает $73$ шага без учёта обработки её возврата; накладные расходы на левый и правый вызовы равны соответственно $34$ и $35$ шагам. Поэтому затраты \texttt{SORT} для отрезка длины $4$, без финальной проверки завершения главного вызова, равны
+\[
+    13+85+8+34+35+2\cdot73=321.
+\]
+
+Для $n\geq 4$ получаем
+\[
+\begin{aligned}
+T_{\mathrm{SORT}}(n)
+&=321+\sum_{m=5}^{n}(11m+97)+2\\
+&=\frac{11n^2+205n-350}{2}.
+\end{aligned}
+\]
+Здесь последние $2$ шага — проверка выхода из главного вызова.
+
+Для малых входов подсчёт отдельно даёт:
+\[
+\begin{aligned}
+T_{\mathrm{SORT}}(1)&=63,\\
+T_{\mathrm{SORT}}(2)&=75,\\
+T_{\mathrm{SORT}}(3)&=184.
+\end{aligned}
+\]
+
+Добавляя чтение входа и вывод результата, получаем точное число шагов в худшем случае:
+\[
+\boxed{
+T_{\max}(n)=
+\begin{cases}
+109, & n=1,\\
+137, & n=2,\\
+262, & n=3,\\
+\dfrac{11n^2+237n-290}{2}, & n\geq 4.
+\end{cases}
+}
+\]
+
+Таким образом, худшая сложность этой реализации QuickSort равна
+\[
+    T_{\max}(n)=\Theta(n^2).
+\]
+Хотя QuickSort обычно имеет ожидаемую сложность $O(n\log n)$ на случайной перестановке, выбор опорного элемента по средней позиции массива не гарантирует сбалансированных разбиений.
+
+\end{document}

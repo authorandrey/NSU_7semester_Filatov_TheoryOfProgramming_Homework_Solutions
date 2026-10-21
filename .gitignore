@@ -6,3 +6,5 @@ out.txt
 # latex
 *.aux
 *.log
+*.out
+*.toc

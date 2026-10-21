@@ -33,7 +33,7 @@
 ;5: l
 ;6: m
 ;7: j
-;8: call
+;8: call (from what place was sink called last time)
 ;9 ... 9+n-1: arr
 
 Load =0
