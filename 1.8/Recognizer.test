@@ -1,0 +1,28 @@
+// should recognize only words : w = a^nb^n (n = 0, 1, ...)
+//    SUCCESS <=> tape is empty, terminal state reached
+//    FAIL    <=> erroneous state reached   
+
+test_empty : #                -> #
+
+test_a     : #a#              -> ERROR
+test_b     : #b#              -> ERROR
+
+test_1    : #ab#              -> #
+test_2    : #aabb#            -> #
+test_3    : #aaabbb#          -> #
+test_4    : #aaaabbbb#        -> #
+test_5    : #aaaaabbbbb#      -> #
+test_20   : #aaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbb#      -> #
+test_50   : #aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb# -> #
+test_100  : #aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb# -> #
+
+test_ba    : #ba#             -> ERROR
+test_aab   : #aab#            -> ERROR
+test_aba   : #aba#            -> ERROR
+test_abab  : #abab#           -> ERROR
+test_aaabb : #aaabb#          -> ERROR
+test_aaabbba: #aaabbba#       -> ERROR
+
+test_a20b21: #aaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbb# -> ERROR
+test_a20b19: #aaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbb#   -> ERROR
+

@@ -1,69 +1,57 @@
 alphabet = [#, a, b]
+
 tapes = [ right ]
 
 START:
     # -> #R Search_0
-
 Search_0:
     a -> #R Search_a
     b -> #R Search_0
     # -> #H STOP
-
 Search_a:
     a -> #R Search_aa
     b -> #R Search_0
     # -> #H STOP
-
 Search_aa:
     a -> #R Search_aa
     b -> #R Search_aab
     # -> #H STOP
-
 Search_aab:
     a -> #R Search_aaba
     b -> #R Search_0
     # -> #H STOP
-
 Search_aaba:
     a -> #R Search_aa
     b -> #R Search_aabab
     # -> #H STOP
-
 Search_aabab:
     a -> #R Search_aababa
     b -> #R Search_0
     # -> #H STOP
-
 Search_aababa:
     a -> #R Search_aa
     b -> bL Restore_6
     # -> #H STOP
-
 Restore_6:
     # -> aL Restore_5
     a -> aL Restore_5
     b -> aL Restore_5
-
 Restore_5:
     # -> bL Restore_4
     a -> bL Restore_4
     b -> bL Restore_4
-
 Restore_4:
     # -> aL Restore_3
     a -> aL Restore_3
     b -> aL Restore_3
-
 Restore_3:
     # -> bL Restore_2
     a -> bL Restore_2
     b -> bL Restore_2
-
 Restore_2:
     # -> aL Restore_1
     a -> aL Restore_1
     b -> aL Restore_1
-
 Restore_1:
     # -> aH STOP
     a -> aH STOP

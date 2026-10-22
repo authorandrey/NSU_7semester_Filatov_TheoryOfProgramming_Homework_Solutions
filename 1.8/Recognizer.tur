@@ -1,0 +1,39 @@
+alphabet = [ #, a, b]
+
+tapes = [ right ]
+
+START:
+  # -> #R ON_LEFT_EDGE 
+  a -> aH ERROR
+  b -> bH ERROR
+
+//  #  ? ...  #
+//     ^
+ON_LEFT_EDGE:
+  # -> #H STOP // not-yet-analyzed part is empty => accept input
+  a -> #R GO_RIGHT
+  b -> bH ERROR
+
+//  # ... #
+//     ^
+GO_RIGHT:
+  # -> #L ON_RIGHT_EDGE
+  a -> aR GO_RIGHT
+  b -> bR GO_RIGHT
+
+//  # ... ? #
+//        ^
+ON_RIGHT_EDGE:
+  # -> #H ERROR
+  a -> aH ERROR
+  b -> #L GO_LEFT
+
+//  # ... #
+//     ^
+GO_LEFT:
+  # -> #R ON_LEFT_EDGE
+  a -> aL GO_LEFT
+  b -> bL GO_LEFT
+
+
+
