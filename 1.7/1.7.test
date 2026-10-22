@@ -1,0 +1,17 @@
+// tests finding the leftmost occurrence of "aababab" and erasing the prefix
+
+test_empty              : #                  -> #
+test_no_match_short     : #ab#               -> #
+test_no_match_repeated  : #ababab#           -> #
+test_no_match_partial   : #aababa#           -> #
+test_no_match_last_bit  : #aababaa#          -> #
+test_exact_match        : #aababab#          -> #aababab#
+test_match_after_a      : #aaababab#         -> ##aababab#
+test_match_after_b      : #baababab#         -> ##aababab#
+test_match_after_ab     : #abaababab#        -> ###aababab#
+test_match_after_abab   : #ababaababab#      -> #####aababab#
+test_match_late         : #bbbbbaababab#     -> ######aababab#
+test_match_with_suffix  : #aabababba#        -> #aabababba#
+test_match_prefix_suffix: #baaabababba#      -> ###aabababba#
+test_false_match_before : #aababaaaababab#   -> ########aababab#
+test_multiple_matches   : #abaabababaababab# -> ###aabababaababab#
