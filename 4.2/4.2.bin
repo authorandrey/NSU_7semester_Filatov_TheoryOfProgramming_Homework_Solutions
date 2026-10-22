@@ -1,0 +1,15 @@
+1    1      ;   1.     Load = 1
+4    23     ;   2.     Store 23
+
+            ; LOOP:
+2    23     ;   3.     Load 23
+9    22     ;   4.     Sub = 22
+25   11     ;   5.     JGTZ END
+22   23     ;   6.     Write * 23
+2    23     ;   7.     Load 23
+6    1      ;   8.     Add = 1
+4    23     ;   9.     Store 23
+23   3      ;   10.    Jump LOOP
+
+            ; END:
+0    0      ;   11.    Halt 0
