@@ -8,14 +8,16 @@
 
 \begin{document}
 
-\section*{Задача 3.1.6f}
+\section*{Задача 3.1.6b}
 
-\textbf{Условие:} Отсортировать последовательность $a_1,\ldots,a_n$ в порядке возрастания элементов.
+\textbf{Условие:} Отсортировать через QuickSort последовательность $a_1,\ldots,a_n$ в порядке возрастания элементов.
 
-\texttt{in:} $n,a_1,\ldots,a_n$\\
-\texttt{out:} $b_1,\ldots,b_n$, где $b_1\leq\cdots\leq b_n$
+in: $n,a_1,\ldots,a_n$\\
+out: $b_1,\ldots,b_n$, где $b_1\leq\cdots\leq b_n$
 
 \section*{Псевдокод}
+Источник: https://gitlab.com/freepascal.org/fpc/source/-/\\
+blob/a399f7898cd93a353973f1aa5aadd591ee83c76b/demo/text/qsort.pp\#1
 \begin{verbatim}
 procedure sort(l, r: longint);
 var
@@ -98,186 +100,293 @@ SORT: Load 4
     Load *0
     Store 7         ; r7 := x = a[(l+r) // 2]
 REPEAT: Jump WHILE_i
-WHILE_i: Load *5
-    Add =9
-    Load *0
+WHILE_i: Load *5    ; r0 := i
+    Add =9          ; r0 := &a[i]
+    Load *0         ; r0 := a[i]
     Sub 7
     JGTZ WHILE_j
-    JZero WHILE_j
+    JZero WHILE_j   ; if a[i] - x >= 0 end while
     Load *5
     Add =1
-    Store *5
+    Store *5         ; i++
     Jump WHILE_i
-WHILE_j: Load 6
-    Add =9
+WHILE_j: Load 6     ; r0 := j
+    Add =9          ; r0 := &a[j]
     Load *0
     Sub 7
-    Mult =-1
+    Mult =-1         ; r0 := (a[j] - x) * (-1)
     JGTZ IF_not_i_gt_j
-    JZero IF_not_i_gt_j
+    JZero IF_not_i_gt_j ; if x - a[j] >= 0 end while
     Load 6
     Sub =1
-    Store 6
+    Store 6         ; j-
     Jump WHILE_j
 IF_not_i_gt_j: Load *5
     Sub 6
-    JGTZ UNTIL
+    JGTZ UNTIL      ; if i > j do not do IF
+    Load *5         ; r0 := i
+    Add =9          ; r0 := &a[i]
+    Load *0         ; r0 := a[i]
+    Store 8         ; r8 := y = a[i]
     Load *5
     Add =9
-    Load *0
-    Store 8
-    Load *5
-    Add =9
-    Store 1
+    Store 1         ; r1 := &a[i]
+    Load 6
+    Add =9          ; r0 := &a[j]
+    Load *0         ; r0 := a[j]
+    Store *1        ; a[i] := a[j]
     Load 6
     Add =9
-    Load *0
-    Store *1
-    Load 6
-    Add =9
-    Store 1
+    Store 1         ; r1 := &a[j]
     Load 8
-    Store *1
+    Store *1        ; a[j] := y
     Load *5
     Add =1
-    Store *5
+    Store *5        ; i++
     Load 6
     Sub =1
-    Store 6
+    Store 6         ; j-
 UNTIL: Load *5
     Sub 6
-    JGTZ IF_l_lt_j
+    JGTZ IF_l_lt_j  ; if i > j end repeat
     Jump REPEAT
 IF_l_lt_j: Load 3
     Sub 6
     JGTZ IF_i_lt_r
-    JZero IF_i_lt_r
+    JZero IF_i_lt_r ; if l - j >= 0 do not do IF
+    ; l = l
     Load 4
     Add =3
-    Store 4
+    Store 4          ; r4 := &r + 3 (next r)
     Load 6
-    Store *4
+    Store *4        ; r := j
     Load 9
     Add =3
-    Store 9
+    Store 9         ; &cs += 3
     Load =1
-    Store *9
-    Jump SORT
+    Store *9        ; cs := 1 (call from sort(l, j))
+    Jump SORT       ; call sort(l, j)
 IF_i_lt_r: Load *5
     Sub *4
     JGTZ CALL_STACK_RETURN
-    JZero CALL_STACK_RETURN
+    JZero CALL_STACK_RETURN    ; if i - r >= 0 do not do IF
     Load *4
-    Store 1
+    Store 1         ; r1 := r
     Load 4
     Add =3
-    Store 4
+    Store 4         ; &r += 3
     Load 1
-    Store *4
+    Store *4        ; r := r1 = r_previous
     Load *5
-    Store 3
+    Store 3         ; l := i
     Load 5
     Add =3
-    Store 5
+    Store 5         ; &i += 3
     Load 9
     Add =3
-    Store 9
+    Store 9         ; &cs += 3
     Load =2
-    Store *9
-    Jump SORT
+    Store *9        ; cs := 2 (call from sort(i, r))
+    Jump SORT       ; call sort(i, r)
 CALL_STACK_RETURN: Load *9
-    JZero PRINT_INIT
+    JZero PRINT_INIT    ; cs == 0 => exit sort(1, max)
     Load 4
     Sub =3
-    Store 4
+    Store 4         ; &r -= 3 (previous r)
     Load 5
     Sub =3
-    Store 5
+    Store 5         ; &i -= 3 (previous i)
     Load *9
-    Store 1
+    Store 1         ; r1 := cs
     Load 9
     Sub =3
-    Store 9
+    Store 9         ; &cs -= 3 (previous cs)
     Load 1
     Sub =1
-    JZero IF_i_lt_r
+    JZero IF_i_lt_r     ; cs == 1 => exit sort(l, j)
     Jump CALL_STACK_RETURN
 PRINT_INIT: Load =10
     Store 1
 PRINT: Load 2
     Sub 1
-    JZero END
+    JZero END       ; r2 == r1 => end print
     Write *1
     Load 1
     Add =1
-    Store 1
+    Store 1         ; r1 += 1
     Jump PRINT
 END: Halt 0
 \end{verbatim}
 
 \section*{Сложность}
 
-Рассматриваем допустимый вход $n\geq 1$. Все команды RAM, включая чтение, запись, переходы и обслуживание стека вызовов, считаются за один шаг.
-
-До вызова \texttt{SORT} выполняется $8n+24$ шагов:
+До вызова SORT:
 \begin{enumerate}
-    \item Проверка $n$ и подготовка адресов — $10$ шагов.
-    \item Чтение массива — $8n+3$ шага.
-    \item Инициализация сортировки и стека — $11$ шагов.
+    \item Проверка $n$ и инициализация - $10$ шагов
+    \item Чтение массива READ\_ARRAY - $n$ итераций:
+    \begin{enumerate}
+        \item $3$ шага на проверку конца массива
+        \item $5$ шагов на тело цикла
+    \end{enumerate}
+    \item Последняя проверка конца массива - $3$ шага
+    \item Инициализация сортировки и стека INIT\_SORT - $11$ шагов
+\end{enumerate}
+Значит до вызова SORT время - $8n+24$ шагов.
+
+После сортировки:
+\begin{enumerate}
+    \item Подготовка PRINT\_INIT - 2 шага
+    \item Вывод массива PRINT - $n$ итераций:
+    \begin{enumerate}
+        \item $3$ шага на проверку конца массива
+        \item $5$ шагов на тело цикла
+    \end{enumerate}
+    \item Последняя проверка конца массива - $3$ шага
+    \item Завершение программы - $1$ шаг
+\end{enumerate}
+Итого, после сортировки время - $8n+6$ шагов.
+
+Значит, общее время вне SORT:
+\[
+    T_{outside}(n)=16n+30
+\]
+
+Стоимость разбиения зависит от массива.
+В худшем суммарном случае опорный элемент минимальный. 
+Рассмотрим плохое разбиение отрезка длины $m=r-l+1\geq5$, при котором
+опорный элемент $x=a[p]$, $p=\lfloor(l+r)/2\rfloor$ минимальный, 
+и остаётся правая подзадача длины $m-1$. Пусть $u$ - количество итераций WHILE\_j в первом проходе, $v$ - количество итераций WHILE\_j во втором проходе. Тогда
+\[
+    u=r-p, v=p-l-1, u+v=m-2
+\]
+
+\begin{enumerate}
+    \item Инициализация SORT до REPEAT - $13$ шагов
+    \item Первый проход через REPEAT, WHILE\_i,
+    WHILE\_j: 
+    \begin{enumerate}
+        \item Переход и проверка WHILE\_i - $1+5$ шагов
+        \item WHILE\_j - $u$ итераций по $11$ шагов и завершающая проверка
+        на опорном элементе - $7$ шагов
+        \item IF\_not\_i\_gt\_j - $3$ шага, обмен и изменение $i,j$ - $22$ шага
+        \item UNTIL - проверка и переход к следующему проходу - $4$ шага
+        \item Итого:
+        \[
+        1+5+11u+7+3+22+4=11u+42
+        \]
+    \end{enumerate}
+    \item Второй проход через REPEAT, WHILE\_i,
+    WHILE\_j:
+    \begin{enumerate}
+        \item Переход и проверка WHILE\_i - $1+5$ шагов
+        \item WHILE\_j - $v$ итераций по $11$ шагов и завершающая проверка
+        - $7$ шагов
+        \item В IF\_not\_i\_gt\_j - $3$ шага
+        \item UNTIL - $3$ шага
+        \item IF\_l\_lt\_j и IF\_i\_lt\_r - по $4$
+        шага
+        \item Итого:
+        \[
+        1+5+11v+7+3+3+4+4=11v+27
+        \]
+    \end{enumerate}
+    \item От IF\_i\_lt\_r до Jump SORT - $18$ шагов
 \end{enumerate}
 
-После завершения сортировки подготовка вывода, вывод массива и остановка занимают $8n+6$ шагов. Следовательно, суммарные затраты вне \texttt{SORT} равны
+Значит от входа в SORT до вызова правой подзадачи:
 \[
-    T_{\mathrm{outside}}(n)=16n+30.
+    T_{sort}(m)
+    =13+(11u+42)+(11v+27)+18
+    =13+11(m-2)+69+18
+    =11m+78
 \]
 
-Стоимость разбиения зависит от входного массива. В худшем суммарном случае для отрезка длины $m\geq 5$ опорный элемент является минимальным: разбиение оставляет правую подзадачу длины $m-1$. Само разбиение занимает $11m+41$ шаг. С учётом подготовки вызова, проверок и возврата такой уровень рекурсии добавляет
+После завершения рекурсивного вызова
+$cs=2$. CALL\_STACK\_RETURN - $17$ шагов. 
+Значит
 \[
-    13+(11m+41)+8+18+17=11m+97
-\]
-шагов к стоимости оставшейся подзадачи.
-
-Для отрезка длины $4$ максимальная суммарная стоимость достигается при разбиении с двумя обменами: получаются две подзадачи длины $2$. Разбиение занимает $85$ шагов. Каждая подзадача длины $2$ занимает $73$ шага без учёта обработки её возврата; накладные расходы на левый и правый вызовы равны соответственно $34$ и $35$ шагам. Поэтому затраты \texttt{SORT} для отрезка длины $4$, без финальной проверки завершения главного вызова, равны
-\[
-    13+85+8+34+35+2\cdot73=321.
+    T_{call}(m)=11m+78+17=11m+95
 \]
 
-Для $n\geq 4$ получаем
-\[
-\begin{aligned}
-T_{\mathrm{SORT}}(n)
-&=321+\sum_{m=5}^{n}(11m+97)+2\\
-&=\frac{11n^2+205n-350}{2}.
-\end{aligned}
-\]
-Здесь последние $2$ шага — проверка выхода из главного вызова.
+Для отрезка длины $4$ рассмотрим массив $[4,3,2,1]$. Опорный элемент
+$x=a_2=3$. После двух обменов получаются подзадачи $[1,2]$ и $[3,4]$.
 
-Для малых входов подсчёт отдельно даёт:
+Сначала посчитаем затраты одной подзадачи длины $2$:
+\begin{enumerate}
+    \item Инициализация в SORT - $13$ шагов
+    \item От REPEAT до UNTIL:
+    \begin{itemize}
+        \item REPEAT - $1$ шаг
+        \item проверка WHILE\_i - $6$ шагов
+        \item в WHILE\_j первая проверка - $7$ шагов, уменьшение $j$ - $4$ шага,
+        повторная проверка - $7$ шагов, всего $18$ шагов
+        \item проверка IF\_not\_i\_gt\_j и обмен - $3+22$ шага
+        \item завершающая проверка UNTIL - $3$ шага
+    \end{itemize}
+    Итого разбиение: $1+6+18+3+22+3=53$ шага
+    \item Проверка IF\_l\_lt\_j: переход выполняется после $3$ шагов
+    \item Проверка IF\_i\_lt\_r - $4$ шага
+\end{enumerate}
+Значит, одна подзадача длины $2$ занимает
 \[
-\begin{aligned}
-T_{\mathrm{SORT}}(1)&=63,\\
-T_{\mathrm{SORT}}(2)&=75,\\
-T_{\mathrm{SORT}}(3)&=184.
-\end{aligned}
+    13+53+3+4=73
+\]
+шага без учета возврата.
+
+\begin{enumerate}
+    \item Инициализация в SORT - $13$ шагов
+    \item Разбиение от REPEAT до выхода через UNTIL:
+    \begin{itemize}
+        \item первый проход: REPEAT - $1$ шаг, WHILE\_i - $5$ шагов
+        WHILE\_j - $6$ шагов, проверка IF\_not\_i\_gt\_j и обмен - $3+22$ шага,
+        UNTIL с переходом к повтору - $4$ шага
+        \item второй проход: REPEAT - $1$ шаг, WHILE\_i - $6$ шагов;
+        WHILE\_j - $6$ шагов, проверка IF\_not\_i\_gt\_j и обмен - $3+22$ шага,
+        UNTIL - $3$ шага
+    \end{itemize}
+    Итого разбиение:
+    \[
+        1+5+6+3+22+4+1+6+6+3+22+3=82
+    \]
+    \item Проверка IF\_l\_lt\_j - $4$ шага
+    \item Левый вызов: подготовка стека до Jump SORT - $11$ шагов,
+    SORT для подзадачи - $73$ шага,
+    возврат с $cs=1$ в CALL\_STACK\_RETURN - $16$ шагов
+    \item После возврата проверка IF\_i\_lt\_r - $4$ шага
+    \item Правый вызов: подготовка стека до Jump SORT - $18$ шагов,
+    SORT для подзадачи - $73$ шага,
+    возврат с $cs=2$ в CALL\_STACK\_RETURN - $17$ шагов
+\end{enumerate}
+Финальная обработка возврата главного вызова - $2$ шага.
+Значит:
+\[
+    T_{SORT, body}(4)=13+82+4+(11+73+16)+4+(18+73+17)+2=313
 \]
 
-Добавляя чтение входа и вывод результата, получаем точное число шагов в худшем случае:
+Значит для $n\geq4$:
 \[
-\boxed{
+T(n)
+=311+\sum_{m=5}^{n}(11m+95)+2
+=\frac{11n^2+201n-354}{2}
+\]
+
+Для малых входов экспериментально программа даёт:
+\[
+T(1)=109,
+T(2)=137,
+T(3)=262
+\]
+- тут уже с учетом outside.
+
+И если добавить $T_{outside}(n)=16n+30$, то получаем:
+\[
 T_{\max}(n)=
 \begin{cases}
-109, & n=1,\\
-137, & n=2,\\
-262, & n=3,\\
-\dfrac{11n^2+237n-290}{2}, & n\geq 4.
+109, & n=1\\
+137, & n=2\\
+262, & n=3\\
+\dfrac{11n^2+233n-294}{2}, & n\geq 4
 \end{cases}
-}
 \]
-
-Таким образом, худшая сложность этой реализации QuickSort равна
-\[
-    T_{\max}(n)=\Theta(n^2).
-\]
-Хотя QuickSort обычно имеет ожидаемую сложность $O(n\log n)$ на случайной перестановке, выбор опорного элемента по средней позиции массива не гарантирует сбалансированных разбиений.
 
 \end{document}
