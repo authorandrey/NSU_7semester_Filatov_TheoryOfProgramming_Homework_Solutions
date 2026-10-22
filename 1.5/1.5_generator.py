@@ -1,10 +1,7 @@
-"""Generate a multitape machine description for adding a constant."""
-
 import sys
 
 
 def generate_mt(k, m):
-    """Generate a multitape machine description for adding k in base m."""
     digits = []
     temp = k
     if temp == 0:

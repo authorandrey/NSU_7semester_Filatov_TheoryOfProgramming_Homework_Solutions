@@ -1,8 +1,4 @@
-"""Generate a Turing machine description for adding k."""
-
-
 def generate_mt(k):
-    """Return a Turing machine description that adds k to its input."""
     bits = []
     temp = k
     while temp > 0:
@@ -60,7 +56,6 @@ def generate_mt(k):
     lines.append("\t0 -> 1H STOP")
     lines.append("\t1 -> 0R Inc")
     lines.append("\t# -> 1H STOP")
-    # WriteOne
     lines.append("WriteOne:")
     lines.append("\t# -> 1H STOP")
 
