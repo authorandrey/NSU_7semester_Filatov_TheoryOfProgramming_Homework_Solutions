@@ -1,0 +1,154 @@
+alphabet = [#, a, b]
+
+tapes = [ right ]
+
+START:
+    # -> #R PREFIX_EMPTY
+PREFIX_EMPTY:
+    # -> #H STOP
+    a -> #R PREFIX_A
+    b -> #R PREFIX_B
+PREFIX_A:
+    # -> #H STOP
+    a -> #R PREFIX_AA
+    b -> #R PREFIX_AB
+PREFIX_B:
+    # -> #H STOP
+    a -> #R PREFIX_BA
+    b -> #R PREFIX_BB
+PREFIX_AA:
+    # -> #H STOP
+    a -> #R PREFIX_AAA
+    b -> #R PREFIX_AAB
+PREFIX_AB:
+    # -> #H STOP
+    a -> #R PREFIX_ABA
+    b -> #R PREFIX_ABB
+PREFIX_BA:
+    # -> #H STOP
+    a -> #R PREFIX_BAA
+    b -> #R PREFIX_BAB
+PREFIX_BB:
+    # -> #H STOP
+    a -> #R PREFIX_BBA
+    b -> #R PREFIX_BBB
+PREFIX_AAA:
+    # -> #H STOP
+    a -> aH ERROR
+    b -> #R PREFIX_AAAB
+PREFIX_AAB:
+    # -> #H STOP
+    a -> #R PREFIX_AABA
+    b -> #R PREFIX_ABB
+PREFIX_ABA:
+    # -> #H STOP
+    a -> #R PREFIX_BAA
+    b -> #R PREFIX_ABAB
+PREFIX_ABB:
+    # -> #H STOP
+    a -> aH ERROR
+    b -> #R PREFIX_BBB
+PREFIX_BAA:
+    # -> #H STOP
+    a -> #R PREFIX_AAA
+    b -> #R PREFIX_BAAB
+PREFIX_BAB:
+    # -> #H STOP
+    a -> #R PREFIX_BABA
+    b -> bH ERROR
+PREFIX_BBA:
+    # -> #H STOP
+    a -> aH ERROR
+    b -> #R PREFIX_BBAB
+PREFIX_BBB:
+    # -> #H STOP
+    a -> #R PREFIX_BBA
+    b -> bH ERROR
+PREFIX_AAAB:
+    # -> #H STOP
+    a -> aH ERROR
+    b -> bH ERROR
+PREFIX_AABA:
+    # -> #H STOP
+    a -> aH ERROR
+    b -> #R PREFIX_AABAB
+PREFIX_ABAB:
+    # -> #H STOP
+    a -> #R PREFIX_ABABA
+    b -> bH ERROR
+PREFIX_BAAB:
+    # -> #H STOP
+    a -> aH ERROR
+    b -> #R PREFIX_ABB
+PREFIX_BABA:
+    # -> #H STOP
+    a -> #R PREFIX_BAA
+    b -> #R PREFIX_BABAB
+PREFIX_BBAB:
+    # -> #H STOP
+    a -> #R PREFIX_BBABA
+    b -> bH ERROR
+PREFIX_AABAB:
+    # -> #H STOP
+    a -> #R PREFIX_AABABA
+    b -> bH ERROR
+PREFIX_ABABA:
+    # -> #H STOP
+    a -> #R PREFIX_BAA
+    b -> #R PREFIX_ABABAB
+PREFIX_BABAB:
+    # -> #H STOP
+    a -> #R PREFIX_BABABA
+    b -> bH ERROR
+PREFIX_BBABA:
+    # -> #H STOP
+    a -> aH ERROR
+    b -> #R PREFIX_BBABAB
+PREFIX_AABABA:
+    # -> #H STOP
+    a -> aH ERROR
+    b -> #R PREFIX_AABABAB
+PREFIX_ABABAB:
+    # -> #H STOP
+    a -> #R PREFIX_ABABABA
+    b -> bH ERROR
+PREFIX_BABABA:
+    # -> #H STOP
+    a -> #R PREFIX_BAA
+    b -> #R PREFIX_BABABAB
+PREFIX_BBABAB:
+    # -> #H STOP
+    a -> #R PREFIX_BBABABA
+    b -> bH ERROR
+PREFIX_AABABAB:
+    # -> #H STOP
+    a -> #R PREFIX_AABABABA
+    b -> bH ERROR
+PREFIX_ABABABA:
+    # -> #H STOP
+    a -> #R PREFIX_ABABABAA
+    b -> #R PREFIX_BABABAB
+PREFIX_BABABAB:
+    # -> #H STOP
+    a -> #R PREFIX_BABABABA
+    b -> bH ERROR
+PREFIX_BBABABA:
+    # -> #H STOP
+    a -> #R PREFIX_BBABABAA
+    b -> bH ERROR
+PREFIX_AABABABA:
+    # -> #H STOP
+    a -> aH ERROR
+    b -> #R PREFIX_BABABAB
+PREFIX_ABABABAA:
+    # -> #H STOP
+    a -> aH ERROR
+    b -> #R PREFIX_BAAB
+PREFIX_BABABABA:
+    # -> #H STOP
+    a -> #R PREFIX_ABABABAA
+    b -> bH ERROR
+PREFIX_BBABABAA:
+    # -> #H STOP
+    a -> #R PREFIX_AAA
+    b -> bH ERROR

@@ -1,0 +1,64 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2cm}
+
+\begin{document}
+
+\section*{Задача 1.10}
+
+\subsection*{Условие} Алфавит $\{\#,a,b\}$. Проверить, является ли входное слово
+подстрокой фиксированной строки
+\[
+db=aababababaabbbababaaab
+\]
+Если да, стереть его с ленты; иначе перейти в $ERROR$.
+
+\subsection*{Сложность в среднем}
+
+Пусть $N_k$ число различных подстрок $db$ длины $k$.
+
+\paragraph{Если $w \subset db$.}
+$|\{w \in \{a,b\}^n \mid w \subset db\}| = N_n$.
+Каждое обрабатывается за $n+2$ шагов.
+
+\paragraph{Если $w \not\subset db$.}
+Пусть $w:=ucv, |u|=k-1, u\in L:=\{w \mid w \subset db\}
+, c\in\{a,b\}, uc\notin L, v\in\{a,b\}^{n-k}$.
+То есть $u$ - наибольший префикс $w$, который является подстрокой $db$,
+а $c$ - первый символ неправильный.
+Число вариантов префикса $uc$ -
+$q_k:=2N_{k-1}-N_k$, а число таких $w$ - $q_k2^{n-k}$.
+Каждое $w$ - за $k+1$ шагов.
+
+И всего на $2^n$ слов. Значит
+\[
+T_{avg}(n)=
+\sum_{k=1}^{\min(n,23)}\frac{q_k(k+1)}{2^k}
++\frac{N_n(n+2)}{2^n} = \sum_{k=4}^{\min(n,23)}\frac{q_k(k+1)}{2^k}
++\frac{N_n(n+2)}{2^n}
+\]
+
+$N_k=0, k>22$, значит сложность в среднем для $k\ge 0$ одинаковая.
+Посчитаем с помощью скрипта
+
+\begin{verbatim}
+N = [0, 2, 4, 8, 11, 12, 13, 14, 15, 14, \
+    13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+def T(n):
+    s = 0
+    for i in range(4, min(n, 23)+1):
+        s += (2*N[i-1] - N[i]) * (i+1) / 2**i
+    s += N[n] * (n+2) / 2**n
+    print(s)
+T(22)
+\end{verbatim}
+
+\[
+T_{avg}(n)\approx 6.484375238418579, n\geq22
+\]
+
+\end{document}

@@ -1,0 +1,14 @@
+test_empty          : ##                          -> ##
+test_a              : #a#                         -> ##
+test_b              : #b#                         -> ##
+test_substring_start: #aababab#                   -> ##
+test_substring_mid  : #abaabbb#                   -> ##
+test_substring_end  : #babaaab#                   -> ##
+test_full_db        : #aababababaabbbababaaab#    -> ##
+test_example        : #abababaa#                  -> ##
+test_short          : #ababab#                    -> ##
+test_aaaa           : #aaaa#                      -> ERROR
+test_bbbb           : #bbbb#                      -> ERROR
+test_extra_b        : #abbbb#                     -> ERROR
+test_almost_match   : #aabababb#                  -> ERROR
+test_wrong_prefix   : #baaaaa#                    -> ERROR
