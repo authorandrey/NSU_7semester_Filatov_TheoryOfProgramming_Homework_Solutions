@@ -1,0 +1,1 @@
+java -jar ../../turing-machine-emulator.jar --program ./substring_search.tur --test ./substring_search.test

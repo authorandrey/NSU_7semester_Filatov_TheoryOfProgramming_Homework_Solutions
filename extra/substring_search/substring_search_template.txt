@@ -1,0 +1,36 @@
+alphabet = [#, a, b]
+tapes = [ right ]
+
+// P = p[0]p[1]...p[L-1] is the fixed non-empty pattern over {a,b}.
+// Search_i means: the longest suffix of the already scanned input that is also
+// a proper prefix of P has length i, 0 <= i < L.
+// delta(i,c) = the length of the longest proper prefix of P that is a suffix
+// of P[0:i] + c. The generated machine has explicit transitions for a and b.
+
+START:
+    # -> #R Search_0
+
+// For each i = 0,...,L-1:
+Search_i:
+    // If i < L-1 and c in {a,b}, or if c does not finish P:
+    c -> #R Search_delta(i,c)
+    // If i = L-1 and c = P[L-1], the pattern has just been found:
+    c -> cL Restore_(L-1)       // when L > 1; c = P[L-1]
+    c -> cH STOP                // when L = 1; c = P[0]
+    # -> #H STOP
+
+// Generated only when L > 1. For j = L-1,...,2, and c in {#,a,b}:
+Restore_j:
+    c -> P[j-1]L Restore_(j-1)
+
+// Final restoration state; for c in {#,a,b}:
+Restore_1:
+    c -> P[0]H STOP
+
+// Generator rules:
+// - For each Search_i, emit one transition for each c in {a,b}.
+// - If i=L-1 and c=P[L-1], emit only the success transition, not the delta rule.
+// - Otherwise emit c -> #R Search_delta(i,c), with delta(i,c) computed by KMP.
+// - Emit # -> #H STOP in every Search_i.
+// - When L=1, no Restore states are generated.
+// - The alphabet and tape declarations have no pattern-specific substitutions.

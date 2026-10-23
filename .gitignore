@@ -12,3 +12,5 @@ out.txt
 # Ignore generated files
 /extra/k_m_number/*.test
 /extra/k_m_number/*.tur
+/extra/substring_search/*.test
+/extra/substring_search/*.tur
