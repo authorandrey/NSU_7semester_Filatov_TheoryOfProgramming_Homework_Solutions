@@ -1,0 +1,225 @@
+alphabet = [#, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A]
+tapes = [ right, right, right ]
+
+START:
+    #, #, # -> #R, #R, #H COPY
+COPY:
+    0, #, # -> 0R, 0R, #H COPY
+    1, #, # -> 1R, 1R, #H COPY
+    2, #, # -> 2R, 2R, #H COPY
+    #, #, # -> #H, #L, #H AFTER_COPY
+AFTER_COPY:
+    #, 0, # -> #H, 0H, #R PUT_FIRST_0
+    #, 1, # -> #H, 1H, #R PUT_FIRST_1
+    #, 2, # -> #H, 2H, #R PUT_FIRST_2
+    #, #, # -> #H, #H, #R WRITE_ZERO
+PUT_FIRST_0:
+    #, 0, # -> #H, 0L, 0L READ_NEXT
+PUT_FIRST_1:
+    #, 1, # -> #H, 1L, 1L READ_NEXT
+PUT_FIRST_2:
+    #, 2, # -> #H, 2L, 2L READ_NEXT
+WRITE_ZERO:
+    #, #, # -> #H, #H, 0L CLEAN_START
+READ_NEXT:
+    #, 0, # -> #H, 0H, #R BEGIN_0
+    #, 1, # -> #H, 1H, #R BEGIN_1
+    #, 2, # -> #H, 2H, #R BEGIN_2
+    #, #, # -> #H, #H, #H CLEAN_START
+BEGIN_0:
+    #, 0, 0 -> #H, 0H, 0R CARRY_0_SRC_0
+    #, 0, 1 -> #H, 0H, 3R CARRY_0_SRC_0
+    #, 0, 2 -> #H, 0H, 6R CARRY_0_SRC_0
+    #, 0, 3 -> #H, 0H, 9R CARRY_0_SRC_0
+    #, 0, 4 -> #H, 0H, 1R CARRY_1_SRC_0
+    #, 0, 5 -> #H, 0H, 4R CARRY_1_SRC_0
+    #, 0, 6 -> #H, 0H, 7R CARRY_1_SRC_0
+    #, 0, 7 -> #H, 0H, AR CARRY_1_SRC_0
+    #, 0, 8 -> #H, 0H, 2R CARRY_2_SRC_0
+    #, 0, 9 -> #H, 0H, 5R CARRY_2_SRC_0
+    #, 0, A -> #H, 0H, 8R CARRY_2_SRC_0
+BEGIN_1:
+    #, 1, 0 -> #H, 1H, 1R CARRY_0_SRC_1
+    #, 1, 1 -> #H, 1H, 4R CARRY_0_SRC_1
+    #, 1, 2 -> #H, 1H, 7R CARRY_0_SRC_1
+    #, 1, 3 -> #H, 1H, AR CARRY_0_SRC_1
+    #, 1, 4 -> #H, 1H, 2R CARRY_1_SRC_1
+    #, 1, 5 -> #H, 1H, 5R CARRY_1_SRC_1
+    #, 1, 6 -> #H, 1H, 8R CARRY_1_SRC_1
+    #, 1, 7 -> #H, 1H, 0R CARRY_2_SRC_1
+    #, 1, 8 -> #H, 1H, 3R CARRY_2_SRC_1
+    #, 1, 9 -> #H, 1H, 6R CARRY_2_SRC_1
+    #, 1, A -> #H, 1H, 9R CARRY_2_SRC_1
+BEGIN_2:
+    #, 2, 0 -> #H, 2H, 2R CARRY_0_SRC_2
+    #, 2, 1 -> #H, 2H, 5R CARRY_0_SRC_2
+    #, 2, 2 -> #H, 2H, 8R CARRY_0_SRC_2
+    #, 2, 3 -> #H, 2H, 0R CARRY_1_SRC_2
+    #, 2, 4 -> #H, 2H, 3R CARRY_1_SRC_2
+    #, 2, 5 -> #H, 2H, 6R CARRY_1_SRC_2
+    #, 2, 6 -> #H, 2H, 9R CARRY_1_SRC_2
+    #, 2, 7 -> #H, 2H, 1R CARRY_2_SRC_2
+    #, 2, 8 -> #H, 2H, 4R CARRY_2_SRC_2
+    #, 2, 9 -> #H, 2H, 7R CARRY_2_SRC_2
+    #, 2, A -> #H, 2H, AR CARRY_2_SRC_2
+CARRY_0_SRC_0:
+    #, 0, 0 -> #H, 0H, 0R CARRY_0_SRC_0
+    #, 0, 1 -> #H, 0H, 3R CARRY_0_SRC_0
+    #, 0, 2 -> #H, 0H, 6R CARRY_0_SRC_0
+    #, 0, 3 -> #H, 0H, 9R CARRY_0_SRC_0
+    #, 0, 4 -> #H, 0H, 1R CARRY_1_SRC_0
+    #, 0, 5 -> #H, 0H, 4R CARRY_1_SRC_0
+    #, 0, 6 -> #H, 0H, 7R CARRY_1_SRC_0
+    #, 0, 7 -> #H, 0H, AR CARRY_1_SRC_0
+    #, 0, 8 -> #H, 0H, 2R CARRY_2_SRC_0
+    #, 0, 9 -> #H, 0H, 5R CARRY_2_SRC_0
+    #, 0, A -> #H, 0H, 8R CARRY_2_SRC_0
+    #, 0, # -> #H, 0H, #L REWIND
+CARRY_1_SRC_0:
+    #, 0, 0 -> #H, 0H, 1R CARRY_0_SRC_0
+    #, 0, 1 -> #H, 0H, 4R CARRY_0_SRC_0
+    #, 0, 2 -> #H, 0H, 7R CARRY_0_SRC_0
+    #, 0, 3 -> #H, 0H, AR CARRY_0_SRC_0
+    #, 0, 4 -> #H, 0H, 2R CARRY_1_SRC_0
+    #, 0, 5 -> #H, 0H, 5R CARRY_1_SRC_0
+    #, 0, 6 -> #H, 0H, 8R CARRY_1_SRC_0
+    #, 0, 7 -> #H, 0H, 0R CARRY_2_SRC_0
+    #, 0, 8 -> #H, 0H, 3R CARRY_2_SRC_0
+    #, 0, 9 -> #H, 0H, 6R CARRY_2_SRC_0
+    #, 0, A -> #H, 0H, 9R CARRY_2_SRC_0
+    #, 0, # -> #H, 0H, 1L REWIND
+CARRY_2_SRC_0:
+    #, 0, 0 -> #H, 0H, 2R CARRY_0_SRC_0
+    #, 0, 1 -> #H, 0H, 5R CARRY_0_SRC_0
+    #, 0, 2 -> #H, 0H, 8R CARRY_0_SRC_0
+    #, 0, 3 -> #H, 0H, 0R CARRY_1_SRC_0
+    #, 0, 4 -> #H, 0H, 3R CARRY_1_SRC_0
+    #, 0, 5 -> #H, 0H, 6R CARRY_1_SRC_0
+    #, 0, 6 -> #H, 0H, 9R CARRY_1_SRC_0
+    #, 0, 7 -> #H, 0H, 1R CARRY_2_SRC_0
+    #, 0, 8 -> #H, 0H, 4R CARRY_2_SRC_0
+    #, 0, 9 -> #H, 0H, 7R CARRY_2_SRC_0
+    #, 0, A -> #H, 0H, AR CARRY_2_SRC_0
+    #, 0, # -> #H, 0H, 2L REWIND
+CARRY_0_SRC_1:
+    #, 1, 0 -> #H, 1H, 0R CARRY_0_SRC_1
+    #, 1, 1 -> #H, 1H, 3R CARRY_0_SRC_1
+    #, 1, 2 -> #H, 1H, 6R CARRY_0_SRC_1
+    #, 1, 3 -> #H, 1H, 9R CARRY_0_SRC_1
+    #, 1, 4 -> #H, 1H, 1R CARRY_1_SRC_1
+    #, 1, 5 -> #H, 1H, 4R CARRY_1_SRC_1
+    #, 1, 6 -> #H, 1H, 7R CARRY_1_SRC_1
+    #, 1, 7 -> #H, 1H, AR CARRY_1_SRC_1
+    #, 1, 8 -> #H, 1H, 2R CARRY_2_SRC_1
+    #, 1, 9 -> #H, 1H, 5R CARRY_2_SRC_1
+    #, 1, A -> #H, 1H, 8R CARRY_2_SRC_1
+    #, 1, # -> #H, 1H, #L REWIND
+CARRY_1_SRC_1:
+    #, 1, 0 -> #H, 1H, 1R CARRY_0_SRC_1
+    #, 1, 1 -> #H, 1H, 4R CARRY_0_SRC_1
+    #, 1, 2 -> #H, 1H, 7R CARRY_0_SRC_1
+    #, 1, 3 -> #H, 1H, AR CARRY_0_SRC_1
+    #, 1, 4 -> #H, 1H, 2R CARRY_1_SRC_1
+    #, 1, 5 -> #H, 1H, 5R CARRY_1_SRC_1
+    #, 1, 6 -> #H, 1H, 8R CARRY_1_SRC_1
+    #, 1, 7 -> #H, 1H, 0R CARRY_2_SRC_1
+    #, 1, 8 -> #H, 1H, 3R CARRY_2_SRC_1
+    #, 1, 9 -> #H, 1H, 6R CARRY_2_SRC_1
+    #, 1, A -> #H, 1H, 9R CARRY_2_SRC_1
+    #, 1, # -> #H, 1H, 1L REWIND
+CARRY_2_SRC_1:
+    #, 1, 0 -> #H, 1H, 2R CARRY_0_SRC_1
+    #, 1, 1 -> #H, 1H, 5R CARRY_0_SRC_1
+    #, 1, 2 -> #H, 1H, 8R CARRY_0_SRC_1
+    #, 1, 3 -> #H, 1H, 0R CARRY_1_SRC_1
+    #, 1, 4 -> #H, 1H, 3R CARRY_1_SRC_1
+    #, 1, 5 -> #H, 1H, 6R CARRY_1_SRC_1
+    #, 1, 6 -> #H, 1H, 9R CARRY_1_SRC_1
+    #, 1, 7 -> #H, 1H, 1R CARRY_2_SRC_1
+    #, 1, 8 -> #H, 1H, 4R CARRY_2_SRC_1
+    #, 1, 9 -> #H, 1H, 7R CARRY_2_SRC_1
+    #, 1, A -> #H, 1H, AR CARRY_2_SRC_1
+    #, 1, # -> #H, 1H, 2L REWIND
+CARRY_0_SRC_2:
+    #, 2, 0 -> #H, 2H, 0R CARRY_0_SRC_2
+    #, 2, 1 -> #H, 2H, 3R CARRY_0_SRC_2
+    #, 2, 2 -> #H, 2H, 6R CARRY_0_SRC_2
+    #, 2, 3 -> #H, 2H, 9R CARRY_0_SRC_2
+    #, 2, 4 -> #H, 2H, 1R CARRY_1_SRC_2
+    #, 2, 5 -> #H, 2H, 4R CARRY_1_SRC_2
+    #, 2, 6 -> #H, 2H, 7R CARRY_1_SRC_2
+    #, 2, 7 -> #H, 2H, AR CARRY_1_SRC_2
+    #, 2, 8 -> #H, 2H, 2R CARRY_2_SRC_2
+    #, 2, 9 -> #H, 2H, 5R CARRY_2_SRC_2
+    #, 2, A -> #H, 2H, 8R CARRY_2_SRC_2
+    #, 2, # -> #H, 2H, #L REWIND
+CARRY_1_SRC_2:
+    #, 2, 0 -> #H, 2H, 1R CARRY_0_SRC_2
+    #, 2, 1 -> #H, 2H, 4R CARRY_0_SRC_2
+    #, 2, 2 -> #H, 2H, 7R CARRY_0_SRC_2
+    #, 2, 3 -> #H, 2H, AR CARRY_0_SRC_2
+    #, 2, 4 -> #H, 2H, 2R CARRY_1_SRC_2
+    #, 2, 5 -> #H, 2H, 5R CARRY_1_SRC_2
+    #, 2, 6 -> #H, 2H, 8R CARRY_1_SRC_2
+    #, 2, 7 -> #H, 2H, 0R CARRY_2_SRC_2
+    #, 2, 8 -> #H, 2H, 3R CARRY_2_SRC_2
+    #, 2, 9 -> #H, 2H, 6R CARRY_2_SRC_2
+    #, 2, A -> #H, 2H, 9R CARRY_2_SRC_2
+    #, 2, # -> #H, 2H, 1L REWIND
+CARRY_2_SRC_2:
+    #, 2, 0 -> #H, 2H, 2R CARRY_0_SRC_2
+    #, 2, 1 -> #H, 2H, 5R CARRY_0_SRC_2
+    #, 2, 2 -> #H, 2H, 8R CARRY_0_SRC_2
+    #, 2, 3 -> #H, 2H, 0R CARRY_1_SRC_2
+    #, 2, 4 -> #H, 2H, 3R CARRY_1_SRC_2
+    #, 2, 5 -> #H, 2H, 6R CARRY_1_SRC_2
+    #, 2, 6 -> #H, 2H, 9R CARRY_1_SRC_2
+    #, 2, 7 -> #H, 2H, 1R CARRY_2_SRC_2
+    #, 2, 8 -> #H, 2H, 4R CARRY_2_SRC_2
+    #, 2, 9 -> #H, 2H, 7R CARRY_2_SRC_2
+    #, 2, A -> #H, 2H, AR CARRY_2_SRC_2
+    #, 2, # -> #H, 2H, 2L REWIND
+REWIND:
+    #, 0, 0 -> #H, 0H, 0L REWIND
+    #, 0, 1 -> #H, 0H, 1L REWIND
+    #, 0, 2 -> #H, 0H, 2L REWIND
+    #, 0, 3 -> #H, 0H, 3L REWIND
+    #, 0, 4 -> #H, 0H, 4L REWIND
+    #, 0, 5 -> #H, 0H, 5L REWIND
+    #, 0, 6 -> #H, 0H, 6L REWIND
+    #, 0, 7 -> #H, 0H, 7L REWIND
+    #, 0, 8 -> #H, 0H, 8L REWIND
+    #, 0, 9 -> #H, 0H, 9L REWIND
+    #, 0, A -> #H, 0H, AL REWIND
+    #, 0, # -> #H, 0L, #H READ_NEXT
+    #, 1, 0 -> #H, 1H, 0L REWIND
+    #, 1, 1 -> #H, 1H, 1L REWIND
+    #, 1, 2 -> #H, 1H, 2L REWIND
+    #, 1, 3 -> #H, 1H, 3L REWIND
+    #, 1, 4 -> #H, 1H, 4L REWIND
+    #, 1, 5 -> #H, 1H, 5L REWIND
+    #, 1, 6 -> #H, 1H, 6L REWIND
+    #, 1, 7 -> #H, 1H, 7L REWIND
+    #, 1, 8 -> #H, 1H, 8L REWIND
+    #, 1, 9 -> #H, 1H, 9L REWIND
+    #, 1, A -> #H, 1H, AL REWIND
+    #, 1, # -> #H, 1L, #H READ_NEXT
+    #, 2, 0 -> #H, 2H, 0L REWIND
+    #, 2, 1 -> #H, 2H, 1L REWIND
+    #, 2, 2 -> #H, 2H, 2L REWIND
+    #, 2, 3 -> #H, 2H, 3L REWIND
+    #, 2, 4 -> #H, 2H, 4L REWIND
+    #, 2, 5 -> #H, 2H, 5L REWIND
+    #, 2, 6 -> #H, 2H, 6L REWIND
+    #, 2, 7 -> #H, 2H, 7L REWIND
+    #, 2, 8 -> #H, 2H, 8L REWIND
+    #, 2, 9 -> #H, 2H, 9L REWIND
+    #, 2, A -> #H, 2H, AL REWIND
+    #, 2, # -> #H, 2L, #H READ_NEXT
+CLEAN_START:
+    #, #, # -> #H, #R, #H CLEAN_2
+CLEAN_2:
+    #, 0, # -> #H, #R, #H CLEAN_2
+    #, 1, # -> #H, #R, #H CLEAN_2
+    #, 2, # -> #H, #R, #H CLEAN_2
+    #, #, # -> #H, #H, #H STOP
