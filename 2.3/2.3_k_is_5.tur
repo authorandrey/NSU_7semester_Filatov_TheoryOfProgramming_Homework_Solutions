@@ -1,0 +1,122 @@
+// Generated from 2.3_template.txt
+// Add two base-5 numbers; least-significant digit first.
+// Tape 1 and tape 2 are preserved; tape 3 stores the sum.
+alphabet = [#, 0, 1, 2, 3, 4]
+tapes = [ right, right, right ]
+
+START:
+    #, #, # -> #R, #R, #R INIT
+
+INIT:
+    #, #, # -> #H, #H, 0H STOP
+    0, 0, # -> 0R, 0R, 0R CARRY_0
+    0, 1, # -> 0R, 1R, 1R CARRY_0
+    0, 2, # -> 0R, 2R, 2R CARRY_0
+    0, 3, # -> 0R, 3R, 3R CARRY_0
+    0, 4, # -> 0R, 4R, 4R CARRY_0
+    0, #, # -> 0R, #H, 0R CARRY_0
+    1, 0, # -> 1R, 0R, 1R CARRY_0
+    1, 1, # -> 1R, 1R, 2R CARRY_0
+    1, 2, # -> 1R, 2R, 3R CARRY_0
+    1, 3, # -> 1R, 3R, 4R CARRY_0
+    1, 4, # -> 1R, 4R, 0R CARRY_1
+    1, #, # -> 1R, #H, 1R CARRY_0
+    2, 0, # -> 2R, 0R, 2R CARRY_0
+    2, 1, # -> 2R, 1R, 3R CARRY_0
+    2, 2, # -> 2R, 2R, 4R CARRY_0
+    2, 3, # -> 2R, 3R, 0R CARRY_1
+    2, 4, # -> 2R, 4R, 1R CARRY_1
+    2, #, # -> 2R, #H, 2R CARRY_0
+    3, 0, # -> 3R, 0R, 3R CARRY_0
+    3, 1, # -> 3R, 1R, 4R CARRY_0
+    3, 2, # -> 3R, 2R, 0R CARRY_1
+    3, 3, # -> 3R, 3R, 1R CARRY_1
+    3, 4, # -> 3R, 4R, 2R CARRY_1
+    3, #, # -> 3R, #H, 3R CARRY_0
+    4, 0, # -> 4R, 0R, 4R CARRY_0
+    4, 1, # -> 4R, 1R, 0R CARRY_1
+    4, 2, # -> 4R, 2R, 1R CARRY_1
+    4, 3, # -> 4R, 3R, 2R CARRY_1
+    4, 4, # -> 4R, 4R, 3R CARRY_1
+    4, #, # -> 4R, #H, 4R CARRY_0
+    #, 0, # -> #H, 0R, 0R CARRY_0
+    #, 1, # -> #H, 1R, 1R CARRY_0
+    #, 2, # -> #H, 2R, 2R CARRY_0
+    #, 3, # -> #H, 3R, 3R CARRY_0
+    #, 4, # -> #H, 4R, 4R CARRY_0
+
+CARRY_0:
+    #, #, # -> #H, #H, #H STOP
+    0, 0, # -> 0R, 0R, 0R CARRY_0
+    0, 1, # -> 0R, 1R, 1R CARRY_0
+    0, 2, # -> 0R, 2R, 2R CARRY_0
+    0, 3, # -> 0R, 3R, 3R CARRY_0
+    0, 4, # -> 0R, 4R, 4R CARRY_0
+    0, #, # -> 0R, #H, 0R CARRY_0
+    1, 0, # -> 1R, 0R, 1R CARRY_0
+    1, 1, # -> 1R, 1R, 2R CARRY_0
+    1, 2, # -> 1R, 2R, 3R CARRY_0
+    1, 3, # -> 1R, 3R, 4R CARRY_0
+    1, 4, # -> 1R, 4R, 0R CARRY_1
+    1, #, # -> 1R, #H, 1R CARRY_0
+    2, 0, # -> 2R, 0R, 2R CARRY_0
+    2, 1, # -> 2R, 1R, 3R CARRY_0
+    2, 2, # -> 2R, 2R, 4R CARRY_0
+    2, 3, # -> 2R, 3R, 0R CARRY_1
+    2, 4, # -> 2R, 4R, 1R CARRY_1
+    2, #, # -> 2R, #H, 2R CARRY_0
+    3, 0, # -> 3R, 0R, 3R CARRY_0
+    3, 1, # -> 3R, 1R, 4R CARRY_0
+    3, 2, # -> 3R, 2R, 0R CARRY_1
+    3, 3, # -> 3R, 3R, 1R CARRY_1
+    3, 4, # -> 3R, 4R, 2R CARRY_1
+    3, #, # -> 3R, #H, 3R CARRY_0
+    4, 0, # -> 4R, 0R, 4R CARRY_0
+    4, 1, # -> 4R, 1R, 0R CARRY_1
+    4, 2, # -> 4R, 2R, 1R CARRY_1
+    4, 3, # -> 4R, 3R, 2R CARRY_1
+    4, 4, # -> 4R, 4R, 3R CARRY_1
+    4, #, # -> 4R, #H, 4R CARRY_0
+    #, 0, # -> #H, 0R, 0R CARRY_0
+    #, 1, # -> #H, 1R, 1R CARRY_0
+    #, 2, # -> #H, 2R, 2R CARRY_0
+    #, 3, # -> #H, 3R, 3R CARRY_0
+    #, 4, # -> #H, 4R, 4R CARRY_0
+
+CARRY_1:
+    #, #, # -> #H, #H, 1H STOP
+    0, 0, # -> 0R, 0R, 1R CARRY_0
+    0, 1, # -> 0R, 1R, 2R CARRY_0
+    0, 2, # -> 0R, 2R, 3R CARRY_0
+    0, 3, # -> 0R, 3R, 4R CARRY_0
+    0, 4, # -> 0R, 4R, 0R CARRY_1
+    0, #, # -> 0R, #H, 1R CARRY_0
+    1, 0, # -> 1R, 0R, 2R CARRY_0
+    1, 1, # -> 1R, 1R, 3R CARRY_0
+    1, 2, # -> 1R, 2R, 4R CARRY_0
+    1, 3, # -> 1R, 3R, 0R CARRY_1
+    1, 4, # -> 1R, 4R, 1R CARRY_1
+    1, #, # -> 1R, #H, 2R CARRY_0
+    2, 0, # -> 2R, 0R, 3R CARRY_0
+    2, 1, # -> 2R, 1R, 4R CARRY_0
+    2, 2, # -> 2R, 2R, 0R CARRY_1
+    2, 3, # -> 2R, 3R, 1R CARRY_1
+    2, 4, # -> 2R, 4R, 2R CARRY_1
+    2, #, # -> 2R, #H, 3R CARRY_0
+    3, 0, # -> 3R, 0R, 4R CARRY_0
+    3, 1, # -> 3R, 1R, 0R CARRY_1
+    3, 2, # -> 3R, 2R, 1R CARRY_1
+    3, 3, # -> 3R, 3R, 2R CARRY_1
+    3, 4, # -> 3R, 4R, 3R CARRY_1
+    3, #, # -> 3R, #H, 4R CARRY_0
+    4, 0, # -> 4R, 0R, 0R CARRY_1
+    4, 1, # -> 4R, 1R, 1R CARRY_1
+    4, 2, # -> 4R, 2R, 2R CARRY_1
+    4, 3, # -> 4R, 3R, 3R CARRY_1
+    4, 4, # -> 4R, 4R, 4R CARRY_1
+    4, #, # -> 4R, #H, 0R CARRY_1
+    #, 0, # -> #H, 0R, 1R CARRY_0
+    #, 1, # -> #H, 1R, 2R CARRY_0
+    #, 2, # -> #H, 2R, 3R CARRY_0
+    #, 3, # -> #H, 3R, 4R CARRY_0
+    #, 4, # -> #H, 4R, 0R CARRY_1
