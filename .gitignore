@@ -8,3 +8,7 @@ out.txt
 *.log
 *.out
 *.toc
+
+# Ignore generated files
+/extra/k_m_number/*.test
+/extra/k_m_number/*.tur

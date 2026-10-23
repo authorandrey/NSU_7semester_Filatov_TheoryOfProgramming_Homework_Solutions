@@ -1,0 +1,1 @@
+java -jar ../../turing-machine-emulator.jar --program ./k_m_number.tur --test ./k_m_number.test
