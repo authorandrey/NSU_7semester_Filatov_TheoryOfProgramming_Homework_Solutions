@@ -1,0 +1,25 @@
+alphabet = [#, a, b]
+tapes = [ right ]
+
+// Fixed database string db = {DB}.
+// S = {epsilon} union all distinct substrings of db.
+// PREFIX_EMPTY represents epsilon; PREFIX_p represents the already-read word p.
+// Every PREFIX-state accepts on the right boundary because p is a substring of db. Accepted input is erased; the empty tape is represented as # in tests.
+
+START:
+    # -> #R PREFIX_EMPTY
+
+// For every distinct substring p of db, including epsilon:
+PREFIX_{STATE_SUFFIX}:
+    # -> #H STOP
+    // For c in {a,b}:
+    c -> #R PREFIX_{NEXT_SUFFIX}    // if p+c is a substring of db
+    c -> cH ERROR                  // otherwise
+
+// Generation rules:
+// 1. Generate all distinct substrings p of db, plus epsilon.
+// 2. Name epsilon PREFIX_EMPTY; name nonempty p PREFIX_{p.upper()}.
+// 3. For each p and c in {a,b}, emit c -> #R PREFIX_(p+c) if p+c is in S;
+//    otherwise emit c -> cH ERROR.
+// 4. Emit '# -> #H STOP' in every PREFIX-state.
+// 5. Emit states by increasing length of p, then lexicographically.

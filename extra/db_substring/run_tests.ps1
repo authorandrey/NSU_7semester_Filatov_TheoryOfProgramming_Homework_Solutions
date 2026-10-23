@@ -1,0 +1,1 @@
+java -jar ../../turing-machine-emulator.jar --program ./db_substring.tur --test ./db_substring.test
