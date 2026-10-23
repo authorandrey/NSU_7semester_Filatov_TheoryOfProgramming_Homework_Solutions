@@ -1,0 +1,125 @@
+//   k - основание системы счисления, 2 <= k <= 16;
+//   D = {digit(0), ..., digit(k-1)};
+//   digit(v) - символ цифры со значением v; 10,...,15 обозначаются A,...,F;
+//   M_digit(v) - помеченный вариант цифры digit(v) на ленте 4;
+//   value(digit(v)) = v, value(#) = 0.
+
+alphabet = [#, digit(0), ..., digit(k-1), M_digit(0), ..., M_digit(k-1)]
+tapes = [ right, right, right, right ]
+
+START:
+    #, #, #, # -> #R, #R, #R, #R COPY_FIRST
+
+// Скопировать B с ленты 2 на ленту 4; первую цифру копии пометить.
+// Для каждого a in D и b in D:
+COPY_FIRST:
+    a, b, #, # -> aH, bR, #H, M_digit(b)R COPY_NEXT
+
+// Продолжить копирование B. После конца B вернуть головку ленты 4 влево.
+// Для каждого a in D и b in D:
+COPY_NEXT:
+    a, b, #, # -> aH, bR, #H, digit(b)R COPY_NEXT
+    // Для каждого a in D, если на ленте 2 достигнут конец числа:
+    a, #, #, # -> aH, #H, #H, #L REWIND_COPY
+
+// Вернуться к левой границе копии B на ленте 4.
+// Для каждого a in D и s in D union {M_digit(0),...,M_digit(k-1)}:
+REWIND_COPY:
+    a, #, #, s -> aH, #H, #H, sL REWIND_COPY
+    // Для каждого a in D, если слева от копии достигнута пустая ячейка:
+    a, #, #, # -> aH, #H, #H, #R MUL_START
+
+// Начать обработку помеченной цифры b второго множителя.
+// Для каждого a in D и b in D:
+MUL_START:
+    a, #, #, M_digit(b) -> aH, #H, #H, M_digit(b)H MUL_{b}_0
+
+// Умножить цифры A на текущую цифру b и прибавить цифру результата x.
+// Состояние MUL_{b}_{c} хранит текущую цифру b и перенос c.
+// Для каждого b in D, c=0,...,k-1, a in D и x in D union {#}:
+//   t = value(a)*value(b) + c + value(x)
+//   out = digit(t mod k), c_next = floor(t/k)
+MUL_{b}_{c}:
+    a, #, x, M_digit(b) -> aR, #H, digit(t mod k)R, M_digit(b)H MUL_{b}_{c_next}
+    // Для каждого x in D union {#}, если на ленте 1 достигнут конец A:
+    // При c=0:
+    #, #, x, M_digit(b) -> #L, #H, xL, M_digit(b)H REWIND_BOTH
+    // При c>0:
+    #, #, x, M_digit(b) -> #H, #H, xH, M_digit(b)H FLUSH_{c}
+
+// Дописать оставшийся перенос к результату.
+// Для каждого c=1,...,k-1, b in D и x in D union {#}:
+//   t = value(x) + c
+//   out = digit(t mod k), c_next = floor(t/k)
+FLUSH_{c}:
+    #, #, x, M_digit(b) -> #H, #H, digit(t mod k)R, M_digit(b)H {FLUSH_{c_next} if c_next>0 else ENDROW}
+
+// Строка частичного произведения завершена; подготовиться к следующей цифре B.
+// Для каждого b in D и x in D union {#}:
+ENDROW:
+    #, #, x, M_digit(b) -> #L, #H, xL, M_digit(b)H REWIND_BOTH
+
+// Вернуть головки лент 1 и 3 к их левым границам.
+// Для каждого b in D:
+// Если a in D и x in D union {#}:
+REWIND_BOTH:
+    a, #, x, M_digit(b) -> aL, #H, {xL if x in D else xH}, M_digit(b)H REWIND_BOTH
+    // Если a=#, а x in D:
+    #, #, x, M_digit(b) -> #H, #H, xL, M_digit(b)H REWIND_BOTH
+    // Если обе головки достигли левых границ:
+    #, #, #, M_digit(b) -> #R, #H, #R, M_digit(b)H ADVANCE_MARKER
+
+// Снять отметку с текущей цифры копии B и проверить следующую позицию.
+// Для каждого a in D, x in D union {#}, b in D:
+ADVANCE_MARKER:
+    a, #, x, M_digit(b) -> aH, #H, xH, digit(b)R CHECK_NEXT_MARKER
+
+// Если следующей цифры B нет, перейти к нормализации результата.
+// Иначе дойти до левого края копии и выровнять ленты для следующего частичного
+// произведения. Для каждого a in D и x in D union {#}:
+CHECK_NEXT_MARKER:
+    a, #, x, # -> aH, #H, xH, #H NORMALIZE_SEEK_END
+    // Для каждого b in D, если следующая цифра B существует:
+    a, #, x, digit(b) -> aH, #H, xH, M_digit(b)L REWIND_COPY_FOR_ALIGN
+
+REWIND_COPY_FOR_ALIGN:
+    // Для каждого a in D, x in D union {#}, s in D union {M_digit(0),...,M_digit(k-1)}:
+    a, #, x, s -> aH, #H, xH, sL REWIND_COPY_FOR_ALIGN
+    // Для каждого a in D и x in D union {#}, достигнув левой границы ленты 4:
+    a, #, x, # -> aH, #H, xH, #R ALIGN
+
+// Сдвигать головки лент 3 и 4 вправо на одинаковое число ячеек,
+// пока на ленте 4 не встретится очередная помеченная цифра.
+// Для каждого a in D, x in D union {#}, b in D:
+ALIGN:
+    a, #, x, digit(b) -> aH, #H, xR, digit(b)R ALIGN
+    a, #, x, M_digit(b) -> aH, #H, xH, M_digit(b)H MUL_{b}_0
+
+// Найти конец результата на ленте 3.
+// Для каждого a in D:
+NORMALIZE_SEEK_END:
+    // Для каждого a in D и x in D:
+    a, #, x, # -> aH, #H, xR, #H NORMALIZE_SEEK_END
+    // Когда лента 3 достигла пустой ячейки за концом результата:
+    a, #, #, # -> aH, #H, #L, #H NORMALIZE_TRIM
+
+// Удалить из правого конца записи лишние нули (старшие разряды).
+// Для каждого a in D:
+NORMALIZE_TRIM:
+    a, #, 0, # -> aH, #H, #L, #H NORMALIZE_TRIM
+    // Для каждого x in D без digit(0), если найден последний ненулевой разряд:
+    a, #, x, # -> aH, #H, xH, #L CLEAN_SCRATCH
+    // Если все разряды результата были нулями:
+    a, #, #, # -> aH, #H, #R, #H NORMALIZE_ZERO
+
+// Если произведение равно нулю, записать единственную цифру 0.
+// Для каждого a in D:
+NORMALIZE_ZERO:
+    a, #, #, # -> aH, #H, 0H, #L CLEAN_SCRATCH
+
+// Очистить ленту 4 движением влево и остановиться у её левой границы.
+// Для каждого a in D, x in D и b in D:
+CLEAN_SCRATCH:
+    a, #, x, digit(b) -> aH, #H, xH, #L CLEAN_SCRATCH
+    // Для каждого a in D и x in D, когда слева от копии достигнута пустая ячейка:
+    a, #, x, # -> aH, #H, xH, #H STOP
