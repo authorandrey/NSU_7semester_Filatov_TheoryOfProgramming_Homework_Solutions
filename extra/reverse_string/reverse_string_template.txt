@@ -1,0 +1,58 @@
+// Template: reverse a string over a given finite alphabet in place.
+// Parameter: ALPHABET = {s_0, ..., s_(n-1)}; each s_i is one character.
+// Reserved symbol: # (blank/boundary). Temporary symbols: L_i and R_i.
+// Output format: #word# -> #reverse(word)#. Empty input is represented by '#'.
+
+alphabet = [#, {s_0, ..., s_(n-1)}, {L_0, ..., L_(n-1)}, {R_0, ..., R_(n-1)}]
+tapes = [ right ]
+
+START:
+    # -> #R FIND_LEFT
+
+FIND_LEFT:
+    {for each i: L_i -> L_iR FIND_LEFT}
+    {for each i: s_i -> L_iR GO_RIGHT_i}
+    {for each i: R_i -> R_iL REWIND_CLEAN}
+    # -> #H STOP                           // empty string
+
+{for each i:}
+GO_RIGHT_i:
+    {for each s in ALPHABET: s -> sR GO_RIGHT_i}
+    {for each marker M in {L_j, R_j}: M -> MR GO_RIGHT_i}
+    # -> #L FIND_RIGHT_i
+
+FIND_RIGHT_i:
+    {for each j: R_j -> R_jL FIND_RIGHT_i} // skip already processed suffix
+    {for each j: s_j -> R_jL RETURN_LEFT_i_j}
+    {for each j: L_j -> s_jL REWIND_CLEAN} // no partner: restore middle symbol
+
+{for each ordered pair (i,j):}
+RETURN_LEFT_i_j:
+    {for each s in ALPHABET: s -> sL RETURN_LEFT_i_j}
+    {for each h: L_h -> L_jR GO_TO_RIGHT_MARK_i_j}
+
+GO_TO_RIGHT_MARK_i_j:
+    {for each s in ALPHABET: s -> sR GO_TO_RIGHT_MARK_i_j}
+    {for each h: L_h -> L_hR GO_TO_RIGHT_MARK_i_j}
+    {for each h: R_h -> R_iL REWIND_LEFT}
+
+REWIND_LEFT:
+    {for each s in ALPHABET and marker M: s -> sL REWIND_LEFT; M -> ML REWIND_LEFT}
+    # -> #R FIND_LEFT
+
+REWIND_CLEAN:
+    {for each s in ALPHABET and marker M: s -> sL REWIND_CLEAN; M -> ML REWIND_CLEAN}
+    # -> #R CLEAN
+
+CLEAN:
+    {for each i: L_i -> s_iR CLEAN}
+    {for each i: R_i -> s_iR CLEAN}
+    {for each s in ALPHABET: s -> sR CLEAN}
+    # -> #H STOP
+
+// Meaning of markers:
+// L_i is a processed left position currently containing s_i.
+// R_i is a processed right position currently containing s_i.
+// On every round, the machine swaps the leftmost and rightmost unprocessed
+// symbols. Once no unprocessed symbol remains, CLEAN restores the alphabet.
+// This template is expanded into concrete transitions by reverse_string_generator.py.

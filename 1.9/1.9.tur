@@ -1,0 +1,72 @@
+alphabet = [#, a, b, c, A, B, C]
+
+tapes = [ right ]
+
+START:
+    # -> #R FIND_A
+    a -> aH ERROR
+    b -> bH ERROR
+    c -> cH ERROR
+// Find the next unmarked a.
+FIND_A:
+    A -> AR FIND_A
+    a -> AR FIND_B
+    B -> BR CHECK_REST
+    b -> bR CHECK_REST
+    C -> CR CHECK_REST
+    c -> cR CHECK_REST
+    # -> #H STOP
+// Find the next unmarked b.
+FIND_B:
+    a -> aR FIND_B
+    B -> BR FIND_B
+    b -> BR FIND_C
+    A -> AH ERROR
+    C -> CH ERROR
+    c -> cH ERROR
+    # -> #H ERROR
+// Find the next unmarked c.
+FIND_C:
+    b -> bR FIND_C
+    B -> BR FIND_C
+    C -> CR FIND_C_AFTER_C
+    c -> CL RETURN_LEFT
+    a -> aH ERROR
+    A -> AH ERROR
+    # -> #H ERROR
+// After a C, no unmarked b may occur.
+FIND_C_AFTER_C:
+    C -> CR FIND_C_AFTER_C
+    c -> CL RETURN_LEFT
+    a -> aH ERROR
+    A -> AH ERROR
+    b -> bH ERROR
+    B -> BH ERROR
+    # -> #H ERROR
+// Return to the left boundary.
+RETURN_LEFT:
+    a -> aL RETURN_LEFT
+    b -> bL RETURN_LEFT
+    c -> cL RETURN_LEFT
+    A -> AL RETURN_LEFT
+    B -> BL RETURN_LEFT
+    C -> CL RETURN_LEFT
+    # -> #R FIND_A
+// No unmarked a remains: check for extra symbols.
+CHECK_REST:
+    A -> AR CHECK_REST
+    B -> BR CHECK_REST
+    C -> CR CHECK_REST
+    a -> aH ERROR
+    b -> bH ERROR
+    c -> cH ERROR
+    # -> #L CLEANUP
+// Erase all matched symbols.
+CLEANUP:
+    A -> #L CLEANUP
+    B -> #L CLEANUP
+    C -> #L CLEANUP
+    a -> aH ERROR
+    b -> bH ERROR
+    c -> cH ERROR
+    # -> #H STOP

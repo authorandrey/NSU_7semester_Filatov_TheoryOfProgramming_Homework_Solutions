@@ -1,0 +1,1 @@
+java -jar ../../turing-machine-emulator.jar --program ./add_constant.tur --test ./add_constant.test

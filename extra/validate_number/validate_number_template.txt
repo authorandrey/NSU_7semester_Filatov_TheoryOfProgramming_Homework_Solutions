@@ -1,0 +1,47 @@
+// Шаблон: проверка канонической записи числа в системе счисления с основанием m.
+// Параметры: m = 2..36; orientation = left|right (сторона младшего разряда).
+// Цифры: 0..9, затем A..Z для значений 10..35.
+// Вход записывается между разделителями # и при корректности не изменяется.
+// Каноническая запись: строка непустая; ноль записывается только как "0";
+// старший разряд любого другого числа не равен 0.
+// Важно: алфавит содержит только # и цифры допустимые для основания m.
+// Для посторонних символов переходы НЕ задаются — эмулятор автоматически выдаёт ERROR.
+
+alphabet = [#, {DIGITS_0_TO_M_MINUS_1}]
+tapes = [ right ]
+
+START:
+    # -> #R {CHECK_FIRST if orientation=right else SCAN}
+
+// Вариант orientation=right: старший разряд — первый символ строки.
+CHECK_FIRST:
+    # -> #H ERROR                    // пустая строка
+    0 -> 0R CHECK_ZERO_FIRST
+    {for each digit d in D_m excluding 0: d -> dR SCAN}
+
+CHECK_ZERO_FIRST:
+    # -> #H STOP                     // строка состоит из единственного символа 0
+    {for each digit d in D_m: d -> dH ERROR}  // после начального 0 есть ещё цифра
+
+SCAN:
+    {for each digit d in D_m: d -> dR SCAN}
+    # -> #H STOP
+
+// Вариант orientation=left: младший разряд — первый символ, старший — последний.
+// Для этого варианта используются блоки START, SCAN, CHECK_MSD и CHECK_SINGLE_ZERO.
+SCAN:
+    {for each digit d in D_m: d -> dR SCAN}
+    # -> #L CHECK_MSD
+
+CHECK_MSD:
+    # -> #H ERROR                    // пустая строка
+    0 -> 0L CHECK_SINGLE_ZERO
+    {for each digit d in D_m excluding 0: d -> dH STOP}
+
+CHECK_SINGLE_ZERO:
+    # -> #H STOP                     // строка — единственный символ 0
+    {for each digit d in D_m: d -> dH ERROR}  // старший ноль в многозначной записи
+
+// D_m = {0, 1, ..., m-1}; символы вне D_m не перечисляются в alphabet
+// и не имеют переходов ни в одном состоянии.
+// Генератор выбирает блоки для ориентации и раскрывает все переходы по D_m.

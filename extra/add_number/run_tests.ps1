@@ -1,0 +1,1 @@
+java -jar ../../turing-machine-emulator.jar --program ./add_number.tur --test ./add_number.test

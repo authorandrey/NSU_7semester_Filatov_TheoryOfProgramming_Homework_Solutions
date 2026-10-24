@@ -1,0 +1,1 @@
+java -jar ../../turing-machine-emulator.jar --program ./erase_prefix_before_match.tur --test ./erase_prefix_before_match.test

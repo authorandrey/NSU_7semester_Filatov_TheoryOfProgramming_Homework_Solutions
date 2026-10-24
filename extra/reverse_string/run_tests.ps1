@@ -1,0 +1,1 @@
+java -jar ../../turing-machine-emulator.jar --program ./reverse_string.tur --test ./reverse_string.test

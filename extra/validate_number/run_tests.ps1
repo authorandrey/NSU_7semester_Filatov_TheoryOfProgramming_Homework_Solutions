@@ -1,0 +1,1 @@
+java -jar ../../turing-machine-emulator.jar --program ./validate_number.tur --test ./validate_number.test

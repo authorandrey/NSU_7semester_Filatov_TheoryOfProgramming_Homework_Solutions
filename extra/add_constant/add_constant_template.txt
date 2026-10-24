@@ -1,0 +1,28 @@
+// Template: add constant k in base m. Digits 10..35 are A..Z.
+// Orientation parameter: LSB=left or LSB=right.
+alphabet = [#, {DIGITS_0_TO_M_MINUS_1}]
+tapes = [ right ]
+
+START:
+    # -> #R SCAN
+
+SCAN:
+    {for each digit d in D_m: d -> dR SCAN}
+    {LSB=left: first digit d -> dH ADD_0_0; right boundary # -> #H STOP for empty input}
+    {LSB=right: right boundary # -> #L ADD_0_0}
+
+{for each position i >= 0 and carry q in {0,1}:}
+ADD_i_q:
+    {for each digit d in D_m:}
+        d -> digit((value_m(d) + digit_m(k,i) + q) mod m) {R if LSB=left else L} ADD_(i+1)_floor((value_m(d)+digit_m(k,i)+q)/m)
+    # -> {digit((digit_m(k,i)+q) mod m)}{R if LSB=left else L} EXT_(i+1)_floor((digit_m(k,i)+q)/m)  // if remaining constant digit or carry
+    # -> #H STOP  // if no remaining constant digit and carry=0
+
+EXT_i_q:
+    # -> {digit((digit_m(k,i)+q) mod m)}{R if LSB=left else L} EXT_(i+1)_floor((digit_m(k,i)+q)/m)  // while digits/carry remain
+    # -> #H STOP  // when no digits/carry remain
+
+STOP:
+    // Halt; output is enclosed by # delimiters.
+
+// digit_m(k,i) = floor(k / m^i) mod m. The generator expands all parameterized rules.

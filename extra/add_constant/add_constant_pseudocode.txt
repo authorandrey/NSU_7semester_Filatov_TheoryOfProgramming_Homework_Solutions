@@ -1,0 +1,17 @@
+Add a fixed nonnegative integer k to an input numeral in base m.
+
+Parameters
+- m: base, 2 <= m <= 36.
+- k: nonnegative integer constant.
+- orientation: left means least-significant digit first; right means most-significant digit first.
+- Digits 0..9 and A..Z represent values 0..35.
+
+Algorithm
+1. Convert k conceptually into base-m digits c_i = floor(k / m^i) mod m.
+2. Start at the least-significant input digit: the leftmost digit for orientation=left, or the rightmost digit for orientation=right.
+3. Keep the carry q (initially 0) and position i (initially 0).
+4. At each input digit d, compute t = value(d) + c_i + q; write digit(t mod m), set q=floor(t/m), advance toward the next more-significant position, and increment i.
+5. Once the input digits are exhausted, continue emitting c_i + q in base m until all constant digits and the carry are exhausted.
+6. Preserve the # delimiters and halt in STOP.
+
+The generated transition table specializes the position and carry into state names, so the output is an ordinary finite-state Turing-machine program rather than executable pseudocode.

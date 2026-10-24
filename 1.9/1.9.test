@@ -1,0 +1,11 @@
+test_empty       : ##             -> ##
+test_abc         : #abc#          -> ##
+test_aabbcc      : #aabbcc#       -> ##
+test_aaabbbccc   : #aaabbbccc#    -> ##
+test_aabcc       : #aabcc#        -> ERROR
+test_abbccc      : #abbccc#       -> ERROR
+test_abcabc      : #abcabc#       -> ERROR
+test_aabbbccc    : #aabbbccc#     -> ERROR
+test_b           : #b#            -> ERROR
+test_ac          : #ac#           -> ERROR
+test_ba          : #ba#           -> ERROR

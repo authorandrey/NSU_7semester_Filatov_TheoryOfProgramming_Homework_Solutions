@@ -10,9 +10,5 @@ out.txt
 *.toc
 
 # Ignore generated files
-/extra/k_m_number/*.test
-/extra/k_m_number/*.tur
-/extra/substring_search/*.test
-/extra/substring_search/*.tur
-/extra/db_substring/*.test
-/extra/db_substring/*.tur
+/extra/**/*.test
+/extra/**/*.tur

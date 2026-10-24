@@ -1,0 +1,21 @@
+alphabet = [#, digit(0), ..., digit(k-1)]
+tapes = [ right, right, right ]
+
+START:
+    #, #, # -> #R, #R, #R INIT
+
+// INIT обрабатывает первую пару цифр. Если обе ленты пусты, сумма - 0.
+INIT:
+    // Для каждого x,y из {digit(0),...,digit(k-1),#}, кроме x=y=#:
+    x, y, # -> x_action, y_action, digit((value(x)+value(y)) mod k)R CARRY_{floor((value(x)+value(y))/k)}
+    #, #, # -> #H, #H, 0H STOP
+
+// value(#)=0. Если символ является цифрой, соответствующая входная
+// головка сдвигается вправо; на # головка остаётся на месте.
+// Для c in {0,1}, x,y in {digit(0),...,digit(k-1),#}, x,y не оба #:
+CARRY_c:
+    x, y, # -> x_action, y_action, digit((value(x)+value(y)+c) mod k)R CARRY_{floor((value(x)+value(y)+c)/k)}
+
+    // Для завершения входов:
+    #, #, # -> #H, #H, #H STOP     // c=0
+    #, #, # -> #H, #H, 1H STOP     // c=1
