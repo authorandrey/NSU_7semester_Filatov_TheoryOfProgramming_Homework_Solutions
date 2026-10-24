@@ -289,7 +289,7 @@ def main(argv: Optional[list[str]] = None) -> int:
         description="Translate RAM assembly with 'call LABEL' and 'ret' into ordinary RAM assembly."
     )
     parser.add_argument("input", type=Path, help="input .tur_call file")
-    parser.add_argument("-o", "--output", type=Path, help="output .tur file (default: input with .tur suffix)")
+    parser.add_argument("-o", "--output", type=Path, help="output .asm file (default: input with .asm suffix)")
     parser.add_argument(
         "--stack-base", type=int, default=None,
         help="first memory cell used for the generated call stack (default: auto-selected; keep this region free)",
@@ -300,7 +300,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     if not input_path.is_file():
         print(f"error: input file not found: {input_path}", file=sys.stderr)
         return 2
-    output_path = args.output if args.output is not None else input_path.with_suffix(".tur")
+    output_path = args.output if args.output is not None else input_path.with_suffix(".asm")
 
     try:
         source = input_path.read_text(encoding="utf-8-sig")
