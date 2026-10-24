@@ -1,0 +1,24 @@
+; Write reversed array using push and pop instructions
+; In: a_1, ..., a_n, 0, where a_i != 0
+; Out: a_n, ..., a_1
+
+; Data Model
+; 0: r0
+; 1: n
+
+LOAD: Read 0
+    JZero PRINT     ; if a_i == 0 then array is ended
+    push 0
+    Load 1
+    Add =1
+    Store 1         ; r1++
+    Jump LOAD
+PRINT: Load 1
+    JZero END       ; if r1 == 0 then array is ended
+    pop 0
+    Write 0
+    Load 1
+    Sub =1
+    Store 1         ; r1--
+    Jump PRINT
+END: Halt 0
