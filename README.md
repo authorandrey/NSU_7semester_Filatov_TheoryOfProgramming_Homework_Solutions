@@ -12,6 +12,71 @@
 
 Используется [эмулятор машин Тьюринга](https://github.com/Svazars/turing-machine-emulator/releases/tag/v0.1.0). Инструкции по установке и настройке Python, Java и эмулятора приведены в исходных проектах.
 
+## Эмулятор RAM/RASP
+
+Исходный код эмулятора и компилятора находится в каталоге `rasp-machine-emulator`.
+Он поддерживает обычный режим RAM и режим RASP, в котором программа хранится в общей памяти с данными.
+
+### Установка и сборка
+
+Для сборки нужны Java (JDK) и sbt. В Windows с установленным Chocolatey sbt можно установить командой:
+
+```powershell
+choco install sbt -y
+```
+
+Проверьте установку:
+
+```powershell
+java -version
+sbt --version
+```
+
+Перейдите в каталог эмулятора и соберите проект:
+
+```powershell
+cd .\rasp-machine-emulator
+sbt clean compile test assembly
+```
+
+После успешной сборки исполняемый JAR находится здесь:
+
+```text
+target\scala-2.13\rasp-machine-emulator-assembly-0.1.0-SNAPSHOT.jar
+```
+
+Чтобы запускать его из каталогов заданий, можно скопировать JAR в корень репозитория. Выполните это из корневой папки проекта:
+
+```powershell
+Copy-Item .\rasp-machine-emulator\target\scala-2.13\rasp-machine-emulator-assembly-0.1.0-SNAPSHOT.jar .\rasp-machine-emulator.jar
+```
+
+### Компиляция и запуск RASP-программ
+
+Для компиляции RASP-программы используйте ключ `--compile-rasp`. Он заставляет компилятор разрешать метки в адреса ячеек команд RASP: `1, 3, 5, ...`. Обычная команда без этого ключа предназначена для RAM и использует правила адресации RAM.
+
+Например, из каталога задания `4.2`, где находится `4.2.asm`:
+
+```powershell
+java -jar ..\rasp-machine-emulator.jar --compile-rasp .\4.2.asm
+```
+
+Рядом с исходным файлом будет создан `4.2.bin`. Запуск с входными данными выполняется так:
+
+```powershell
+java -jar ..\rasp-machine-emulator.jar --rasp .\4.2.bin "1 2 3" 1000
+```
+
+Аргументы запуска: `--rasp`, путь к скомпилированному `.bin`, входные числа в одной строке через пробел и максимальное число шагов. Для программы, которой не нужны входные данные, можно передать число-заполнитель, например `"0"`; такая программа не должна выполнять `Read`, если число не является её настоящим входом.
+
+Запустить тесты RASP из каталога репозитория можно командой:
+
+```powershell
+java -jar .\rasp-machine-emulator.jar --rasp-test .\rasp-machine-emulator\samples\RASP\Jump.bin .\rasp-machine-emulator\samples\RASP\Jump.tests 1000
+```
+
+Команды режима RAM остаются доступными без префикса `--rasp`: `java -jar rasp-machine-emulator.jar <file>.asm` компилирует RAM-программу, `java -jar rasp-machine-emulator.jar <file>.bin "1 2 3" 1000` запускает её, а `--test` запускает тесты RAM.
+
 ## Дополнительные программы (`extra`)
 
 В `extra` собраны шаблоны и Python-генераторы для дополнительных задач. Для каждого такого шаблона предусмотрен `test_generator`, который запускается через общий лаунчер после успешной генерации программы.
