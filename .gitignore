@@ -1,5 +1,6 @@
 turing-machine-emulator.jar
 ram-machine-emulator.jar
+rasp-machine-emulator.jar
 log.txt
 out.txt
 
@@ -12,3 +13,30 @@ out.txt
 # Ignore generated files
 /extra/**/*.test
 /extra/**/*.tur
+
+# sbt build artifacts
+target/
+project/target/
+project/project/
+
+# Compiled Scala / JVM files
+*.class
+
+# IDE: IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# IDE: Metals / VS Code
+.metals/
+.bloop/
+.bsp/
+.scala-build/
+
+# Logs
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
