@@ -1,0 +1,74 @@
+1    4      ;   1.     Load = 4
+4    3      ;   2.     Store 3
+23   4      ;   3.     Jump __STACKGEN_ENTRY
+
+            ; __STACKGEN_ENTRY:
+23   5      ;   4.     Jump __STACKGEN_BODY
+
+            ; __STACKGEN_BODY:
+23   6      ;   5.     Jump __STACKGEN_SRC_1
+
+            ; __STACKGEN_SRC_1:
+23   7      ;   6.     Jump LOAD
+
+            ; LOAD:
+18   0      ;   7.     Read 0
+
+            ; __STACKGEN_SRC_2:
+24   19     ;   8.     JZero PRINT
+
+            ; __STACKGEN_SRC_3:
+2    0      ;   9.     Load 0
+5    3      ;   10.    Store * 3
+2    3      ;   11.    Load 3
+6    1      ;   12.    Add = 1
+4    3      ;   13.    Store 3
+
+            ; __STACKGEN_SRC_4:
+2    1      ;   14.    Load 1
+
+            ; __STACKGEN_SRC_5:
+6    1      ;   15.    Add = 1
+
+            ; __STACKGEN_SRC_6:
+4    1      ;   16.    Store 1
+
+            ; __STACKGEN_SRC_7:
+23   7      ;   17.    Jump LOAD
+
+            ; __STACKGEN_SRC_8:
+23   19     ;   18.    Jump PRINT
+
+            ; PRINT:
+2    1      ;   19.    Load 1
+
+            ; __STACKGEN_SRC_9:
+24   32     ;   20.    JZero END
+
+            ; __STACKGEN_SRC_10:
+2    3      ;   21.    Load 3
+9    1      ;   22.    Sub = 1
+4    3      ;   23.    Store 3
+3    3      ;   24.    Load * 3
+4    0      ;   25.    Store 0
+
+            ; __STACKGEN_SRC_11:
+21   0      ;   26.    Write 0
+
+            ; __STACKGEN_SRC_12:
+2    1      ;   27.    Load 1
+
+            ; __STACKGEN_SRC_13:
+9    1      ;   28.    Sub = 1
+
+            ; __STACKGEN_SRC_14:
+4    1      ;   29.    Store 1
+
+            ; __STACKGEN_SRC_15:
+23   19     ;   30.    Jump PRINT
+
+            ; __STACKGEN_SRC_16:
+23   32     ;   31.    Jump END
+
+            ; END:
+0    0      ;   32.    Halt 0
