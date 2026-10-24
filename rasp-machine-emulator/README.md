@@ -1,38 +1,122 @@
-# rasp-machine-emulator
-Simple emulator of RAM machines. Intended to be used as supplementary material to "Theory of programming" course in Novosibirsk State University (see https://github.com/Svazars/theory-of-programming-notes).
+# Решения домашних заданий по теории программирования
 
+Репозиторий содержит решения домашних заданий по теории программирования для семинаров Филатова. Задания взяты из [сборника задач](https://github.com/Svazars/theory-of-programming-notes/blob/main/pdfs/problems.pdf), подготовленного в рамках проекта [Theory of Programming Notes](https://github.com/Svazars/theory-of-programming-notes).
 
-## How to use
+## Структура
 
-- Ensure `java` is installed on your computer (e.g. `java -version` should print something).
-- Download latest stable release (https://github.com/Svazars/ram-machine-emulator/releases/) or build emulator from sources.
-- Unzip release archive.
-- `cd samples/Printer` and run `run.sh`. You should see successful emulation of simple tutorial program.
-- Use `java -jar rasp-machine-emulator.jar` to get list of available options.
+Каждая папка соответствует номеру задания. В папках находятся программы машин Тьюринга (`.tur`) и тесты (`.test`). Для заданий `1.4` и `1.5` также добавлены Python-генераторы машин, шаблоны и PowerShell-скрипты для генерации программы и её проверки на тестах.
 
-Now you could play around with other samples and start writing your own programs for RAM machines!
+## Проверка решений
 
-## How to develop
+Для выполнения сценариев требуются Python, Java и PowerShell. Сценарии `1.4.GenerateAndRunTests.ps1` и `1.5.GenerateAndRunTests.ps1` запускайте из соответствующей папки задания. Файл эмулятора `turing-machine-emulator.jar` должен находиться в корневой папке репозитория.
 
-This section is under construction :)
+Используется [эмулятор машин Тьюринга](https://github.com/Svazars/turing-machine-emulator/releases/tag/v0.1.0). Инструкции по установке и настройке Python, Java и эмулятора приведены в исходных проектах.
 
+## Эмулятор RAM/RASP
 
-## RASP mode
+Исходный код эмулятора и компилятора находится в каталоге `rasp-machine-emulator`.
+Он поддерживает обычный режим RAM и режим RASP, в котором программа хранится в общей памяти с данными.
 
-The emulator also supports RASP programs, where the instructions and data share the
-same memory. The compiled program is loaded into memory cells `1, 2, ...`: each
-instruction occupies two cells (`opcode`, `argument`), and execution starts at cell
-`1`. A normal instruction advances the program counter by two; jump arguments are
-absolute memory addresses of opcode cells. Since code and data share memory,
-`Store` and `Read` can modify instruction opcodes or arguments.
+### Установка и сборка
 
-Examples:
+Для сборки нужны Java (JDK) и sbt. В Windows с установленным Chocolatey sbt можно установить командой:
 
-- `java -jar rasp-machine-emulator.jar --compile-rasp samples/RASP/Jump.asm` -- compile an
-  assembly file with RASP label addresses (labels resolve to `1, 3, 5, ...`).
-- `java -jar rasp-machine-emulator.jar --rasp samples/RASP/Jump.bin "" 1000` -- run a RASP
-  program with no input.
-- `java -jar rasp-machine-emulator.jar --rasp-test samples/RASP/Jump.bin samples/RASP/Jump.tests 1000`
-  -- test a RASP program.
+```powershell
+choco install sbt -y
+```
 
-The original commands without the `--rasp` option retain their RAM semantics.
+Проверьте установку:
+
+```powershell
+java -version
+sbt --version
+```
+
+Перейдите в каталог эмулятора и соберите проект:
+
+```powershell
+cd .\rasp-machine-emulator
+sbt clean compile test assembly
+```
+
+После успешной сборки исполняемый JAR находится здесь:
+
+```text
+target\scala-2.13\rasp-machine-emulator-assembly-0.1.0-SNAPSHOT.jar
+```
+
+Чтобы запускать его из каталогов заданий, можно скопировать JAR в корень репозитория. Выполните это из корневой папки проекта:
+
+```powershell
+Copy-Item .\rasp-machine-emulator\target\scala-2.13\rasp-machine-emulator-assembly-0.1.0-SNAPSHOT.jar .\rasp-machine-emulator.jar
+```
+
+### Компиляция и запуск RASP-программ
+
+Для компиляции RASP-программы используйте ключ `--compile-rasp`. Он заставляет компилятор разрешать метки в адреса ячеек команд RASP: `1, 3, 5, ...`. Обычная команда без этого ключа предназначена для RAM и использует правила адресации RAM.
+
+Например, из каталога задания `4.2`, где находится `4.2.asm`:
+
+```powershell
+java -jar ..\rasp-machine-emulator.jar --compile-rasp .\4.2.asm
+```
+
+Рядом с исходным файлом будет создан `4.2.bin`. Запуск с входными данными выполняется так:
+
+```powershell
+java -jar ..\rasp-machine-emulator.jar --rasp .\4.2.bin "1 2 3" 1000
+```
+
+Аргументы запуска: `--rasp`, путь к скомпилированному `.bin`, входные числа в одной строке через пробел и максимальное число шагов. Для программы, которой не нужны входные данные, можно передать число-заполнитель, например `"0"`; такая программа не должна выполнять `Read`, если число не является её настоящим входом.
+
+Запустить тесты RASP из каталога репозитория можно командой:
+
+```powershell
+java -jar .\rasp-machine-emulator.jar --rasp-test .\rasp-machine-emulator\samples\RASP\Jump.bin .\rasp-machine-emulator\samples\RASP\Jump.tests 1000
+```
+
+Команды режима RAM остаются доступными без префикса `--rasp`: `java -jar rasp-machine-emulator.jar <file>.asm` компилирует RAM-программу, `java -jar rasp-machine-emulator.jar <file>.bin "1 2 3" 1000` запускает её, а `--test` запускает тесты RAM.
+
+## Дополнительные программы (`extra`)
+
+В `extra` собраны шаблоны и Python-генераторы для дополнительных задач. Для каждого такого шаблона предусмотрен `test_generator`, который запускается через общий лаунчер после успешной генерации программы.
+
+| Каталог | Задача | Параметры |
+|---|---|---|
+| `extra/k_m_number` | Перевод числа из `k`-ичной системы в `m`-ичную на многоленточной МТ | `k`, `m` — основания систем счисления |
+| `extra/substring_search` | Проверить, встречается ли фиксированная подстрока во входной строке над `{a,b}` | `pattern` — непустая подстрока из `a` и `b` |
+| `extra/db_substring` | Проверить, является ли входная строка подстрокой фиксированной строки БД | `db` — строка БД из `a` и `b` |
+| `extra/erase_prefix_before_match` | Найти самое левое вхождение подстроки и стереть всё перед ним; если вхождения нет, стереть всё слово | `pattern` — непустая подстрока из `a` и `b` |
+| `extra/add_constant` | Прибавить константу к числу в `m`-ичной системе на одноленточной МТ | `m` — основание `2..36`; `k` — неотрицательная константа; `orientation` — `left` или `right` |
+| `extra/add_number` | Сложить два числа в `k`-ичной системе на трёхленточной МТ | `k` — основание `2..36` |
+| `extra/reverse_string` | Развернуть слово на одноленточной МТ | `alphabet` — конечный алфавит, например `abc` или `a,b,c` |
+| `extra/validate_number` | Проверить каноническую запись числа в `m`-ичной системе | `m` — основание `2..36`; `orientation` — `left` или `right` |
+
+### Запуск общего меню
+
+Сохраните `extra_launcher.py` в корневой папке репозитория — рядом с каталогом `extra` — и запустите:
+
+```bash
+python extra_launcher.py
+```
+
+Лаунчер показывает список шаблонов, параметры и краткие описания. После выбора шаблона он спрашивает значения параметров, запускает соответствующий `generator`, а при успешном завершении — `test_generator` из той же папки. Если генератор завершился с ошибкой, тесты для этого шаблона не запускаются.
+
+Дополнительные режимы:
+
+```bash
+python extra_launcher.py --list      # вывести список шаблонов и завершить работу
+python extra_launcher.py --dry-run   # показать команды, не запуская скрипты
+```
+
+Также можно выбрать шаблон по его ключу, например `add_constant`, когда лаунчер показывает приглашение выбора.
+
+### Параметры новых генераторов
+
+- **`erase_prefix_before_match_generator.py PATTERN [output.tur]`** — `PATTERN` должен быть непустым словом над `{a,b}`. Если шаблон найден, символы до самого левого вхождения стираются, а само вхождение и суффикс остаются. Если шаблон отсутствует, стирается всё входное слово.
+- **`add_constant_generator.py m k left|right [output.tur]`** — прибавляет `k` к числу в системе основания `m`; основание должно быть от 2 до 36, `k` — неотрицательным. `left` означает, что младший разряд находится слева, `right` — что он находится справа. Цифры со значениями 10–35 записываются буквами `A`–`Z`.
+- **`add_number_generator.py k [output.tur]`** — генерирует трёхленточную МТ для сложения двух чисел в системе основания `k` (от 2 до 36). На первых двух лентах операнды сохраняются; результат записывается на третью. Младший разряд записан первым (слева).
+- **`reverse_string_generator.py alphabet [output.tur]`** — `alphabet` можно задавать строкой вроде `abc` или списком через запятую `a,b,c`. Каждый символ должен состоять из одного знака; `#` зарезервирован как маркер границы/пустой символ. Вход и результат имеют вид `#word#` и `#reverse(word)#`; пустой ввод представлен `#`.
+- **`validate_number_generator.py m left|right [output.tur]`** — проверяет каноническую запись числа в системе основания `m` (от 2 до 36): ведущие нули запрещены, кроме числа `0`. Ориентация задаёт расположение младшего разряда. Для символов, не входящих в алфавит выбранного основания, переходы не определены, и эмулятор должен отклонить такую строку.
+
+Генераторы по умолчанию записывают программу в `.tur`-файл с именем, указанным в соответствующем скрипте. Необязательный аргумент `output.tur` позволяет выбрать другое имя при ручном запуске. Общий лаунчер использует выходной файл по умолчанию.
