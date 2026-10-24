@@ -1,0 +1,99 @@
+; MAP for the input format: n, k, then a_11, a_21, ..., a_k1, a_12, ..., a_kn.
+; Example function: f(x_1, ..., x_k) = x_1 + ... + x_k.
+; R11 = number of tuples remaining; R12 = k.
+; R2-R5 = parameters to F; F leaves them unchanged and returns the result in R0.
+
+Read 11
+Read 12
+
+MAP_LOOP:
+; Clear all parameter cells so unused parameters are zero.
+Load =0
+Store 2
+Store 3
+Store 4
+Store 5
+
+; Read exactly k values into R2, ..., R(k+1).
+Load 12
+Sub =1
+JZero READ_K1
+Load 12
+Sub =2
+JZero READ_K2
+Load 12
+Sub =3
+JZero READ_K3
+Jump READ_K4
+
+READ_K1:
+Read 2
+Jump APPLY_F
+
+READ_K2:
+Read 2
+Read 3
+Jump APPLY_F
+
+READ_K3:
+Read 2
+Read 3
+Read 4
+Jump APPLY_F
+
+READ_K4:
+Read 2
+Read 3
+Read 4
+Read 5
+
+APPLY_F:
+call F
+Write 0
+Load 11
+Sub =1
+Store 11
+JZero END
+Jump MAP_LOOP
+
+; Example f: sum of the first k parameters.
+; Uses only volatile cells and R0 for the result, preserving R2-R5.
+F:
+Load 12
+Sub =1
+JZero F_K1
+Load 12
+Sub =2
+JZero F_K2
+Load 12
+Sub =3
+JZero F_K3
+
+F_K4:
+Load 2
+Add 3
+Add 4
+Add 5
+Store 0
+ret
+
+F_K1:
+Load 2
+Store 0
+ret
+
+F_K2:
+Load 2
+Add 3
+Store 0
+ret
+
+F_K3:
+Load 2
+Add 3
+Add 4
+Store 0
+ret
+
+END:
+Halt 0

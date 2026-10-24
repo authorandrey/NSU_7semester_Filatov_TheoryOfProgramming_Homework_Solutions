@@ -13,6 +13,10 @@ out.txt
 # Ignore generated files
 /extra/**/*.test
 /extra/**/*.tur
+/notes/seminar_6/stack_realization/*.asm
+/notes/seminar_6/stack_realization/*.bin
+/notes/seminar_7/map/*.asm
+/notes/seminar_7/map/*.bin
 
 # sbt build artifacts
 target/
