@@ -1,0 +1,1 @@
+java -jar ../../turing-machine-emulator.jar --program ./2.4_k_is_5.tur --test ./2.4_k_is_5.test
