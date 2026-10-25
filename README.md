@@ -837,7 +837,7 @@ java -jar .\rasp-machine-emulator.jar .\notes\seminar_7\map\map_sum.asm
 ```bash
 cd automata-solver
 npm install
-npm run dev
+npm run dev -- --host 127.0.0.1 --port 5173 --strictPort
 ```
 
 Vite выведет адрес локального сервера. По умолчанию это:
@@ -1078,7 +1078,7 @@ cd automata-solver
 npm install
 npm test
 npm run build
-npm run dev
+npm run dev -- --host 127.0.0.1 --port 5173 --strictPort
 ```
 
 ---
