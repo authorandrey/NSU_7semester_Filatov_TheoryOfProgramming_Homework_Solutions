@@ -1,0 +1,91 @@
+1    1000   ;   1.     Load = 1000
+4    1      ;   2.     Store 1
+
+            ; READ_TOKEN:
+18   2      ;   3.     Read 2
+2    2      ;   4.     Load 2
+24   63     ;   5.     JZero FINISH
+25   55     ;   6.     JGTZ PUSH
+
+            ; POP_OPERANDS:
+2    1      ;   7.     Load 1
+9    1      ;   8.     Sub = 1
+4    3      ;   9.     Store 3
+3    3      ;   10.    Load * 3
+4    4      ;   11.    Store 4
+2    1      ;   12.    Load 1
+9    1      ;   13.    Sub = 1
+4    1      ;   14.    Store 1
+2    1      ;   15.    Load 1
+9    1      ;   16.    Sub = 1
+4    3      ;   17.    Store 3
+3    3      ;   18.    Load * 3
+4    5      ;   19.    Store 5
+2    1      ;   20.    Load 1
+9    1      ;   21.    Sub = 1
+4    1      ;   22.    Store 1
+2    2      ;   23.    Load 2
+6    1      ;   24.    Add = 1
+24   36     ;   25.    JZero OP_ADD
+2    2      ;   26.    Load 2
+6    2      ;   27.    Add = 2
+24   39     ;   28.    JZero OP_SUB
+2    2      ;   29.    Load 2
+6    3      ;   30.    Add = 3
+24   42     ;   31.    JZero OP_MULT
+2    2      ;   32.    Load 2
+6    4      ;   33.    Add = 4
+24   45     ;   34.    JZero OP_DIV
+23   69     ;   35.    Jump INVALID
+
+            ; OP_ADD:
+2    5      ;   36.    Load 5
+7    4      ;   37.    Add 4
+23   50     ;   38.    Jump PUSH_RESULT
+
+            ; OP_SUB:
+2    5      ;   39.    Load 5
+10   4      ;   40.    Sub 4
+23   50     ;   41.    Jump PUSH_RESULT
+
+            ; OP_MULT:
+2    5      ;   42.    Load 5
+13   4      ;   43.    Mult 4
+23   50     ;   44.    Jump PUSH_RESULT
+
+            ; OP_DIV:
+2    4      ;   45.    Load 4
+24   68     ;   46.    JZero DIV_ZERO
+2    5      ;   47.    Load 5
+16   4      ;   48.    Div 4
+23   50     ;   49.    Jump PUSH_RESULT
+
+            ; PUSH_RESULT:
+5    3      ;   50.    Store * 3
+2    1      ;   51.    Load 1
+6    1      ;   52.    Add = 1
+4    1      ;   53.    Store 1
+23   3      ;   54.    Jump READ_TOKEN
+
+            ; PUSH:
+2    1      ;   55.    Load 1
+4    3      ;   56.    Store 3
+2    2      ;   57.    Load 2
+5    3      ;   58.    Store * 3
+2    1      ;   59.    Load 1
+6    1      ;   60.    Add = 1
+4    1      ;   61.    Store 1
+23   3      ;   62.    Jump READ_TOKEN
+
+            ; FINISH:
+2    1      ;   63.    Load 1
+9    1      ;   64.    Sub = 1
+4    3      ;   65.    Store 3
+22   3      ;   66.    Write * 3
+0    0      ;   67.    Halt 0
+
+            ; DIV_ZERO:
+23   68     ;   68.    Jump DIV_ZERO
+
+            ; INVALID:
+23   69     ;   69.    Jump INVALID

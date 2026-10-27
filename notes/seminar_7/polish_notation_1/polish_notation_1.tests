@@ -1,0 +1,5 @@
+test_single_number : 42 0 -> 42
+test_add : 2 3 -1 0 -> 5
+test_subtract_positive : 9 4 -2 0 -> 5
+test_subtract_negative : 3 8 -2 0 -> -5
+test_multiply : 6 7 -3 0 -> 42
