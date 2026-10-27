@@ -129,8 +129,10 @@ def parse_source(source: str) -> list[SourceNode]:
 
 def choose_stack_base(nodes: list[SourceNode], requested: Optional[int]) -> int:
     if requested is not None:
-        if requested < 2:
-            raise TranslationError("--stack-base must be at least 2 (cell 1 is reserved by the call convention)")
+        if requested < 12:
+            raise TranslationError(
+                "--stack-base must be at least 12 (R1-R10 are reserved/work registers and cell N-1 stores the stack pointer)"
+            )
         return requested
 
     # Avoid all explicit numeric literals with a generous gap. This is a default,
@@ -185,6 +187,11 @@ def translate(source: str, stack_base: Optional[int] = None) -> tuple[str, dict[
             node.arg = source_pc_labels[target - 1]
 
     calls = [node for node in nodes if node.op == "call"]
+    # Every label used as a call target is treated as a function entry. The
+    # generated prologue saves R2-R5 in this invocation's frame; each ret in
+    # the function restores them. This makes the non-volatile contract automatic
+    # and works for recursive calls because all saved values use the same stack.
+    function_entries = {node.arg for node in calls}
     has_return = any(node.op == "ret" for node in nodes)
     after_labels = [gen(f"AFTER_{i}") for i in range(len(calls))]
     match_labels = [gen(f"MATCH_{i}") for i in range(len(calls))]
@@ -209,10 +216,27 @@ def translate(source: str, stack_base: Optional[int] = None) -> tuple[str, dict[
             labels.insert(0, user_body_label)
             first_user_node = False
 
+        seq: list[OutInstr] = []
+
+        # A called label marks a function entry. Save the incoming values of
+        # the callee-saved registers on the shared call stack before user code
+        # can modify them. Since call already pushed R1, this is the rest of
+        # the activation record.
+        is_function_entry = bool(set(node.labels) & function_entries)
+        if is_function_entry:
+            for register in (2, 3, 4, 5):
+                seq.extend([
+                    OutInstr("Load", str(register), comment=f"save incoming R{register}"),
+                    OutInstr("Store", f"*{sp_cell}", comment="push non-volatile register"),
+                    OutInstr("Load", str(sp_cell)),
+                    OutInstr("Add", "=1"),
+                    OutInstr("Store", str(sp_cell), comment="advance call-stack pointer"),
+                ])
+
         if node.op == "call":
             idx = call_index
             call_index += 1
-            seq = [
+            seq.extend([
                 OutInstr("Load", "1", comment="save caller's return address"),
                 OutInstr("Store", f"*{sp_cell}", comment="push R1 onto the call stack"),
                 OutInstr("Load", str(sp_cell)),
@@ -228,11 +252,26 @@ def translate(source: str, stack_base: Optional[int] = None) -> tuple[str, dict[
                 OutInstr("Load", f"*{sp_cell}"),
                 OutInstr("Store", "1", comment="restore caller's R1"),
                 OutInstr("Load", "10", comment="restore function result in R0"),
-            ]
+            ])
         elif node.op == "ret":
-            seq = [OutInstr("Jump", return_dispatch, comment="return via generated dispatch table")]
+            # Preserve the result while popping and restoring R2-R5. The
+            # callee's saved registers are above its saved return address,
+            # so after this sequence the return dispatcher still sees R1.
+            seq.append(OutInstr("Store", "10", comment="preserve return value during epilogue"))
+            for register in (5, 4, 3, 2):
+                seq.extend([
+                    OutInstr("Load", str(sp_cell)),
+                    OutInstr("Sub", "=1"),
+                    OutInstr("Store", str(sp_cell), comment="pop saved non-volatile register"),
+                    OutInstr("Load", f"*{sp_cell}"),
+                    OutInstr("Store", str(register), comment=f"restore R{register}"),
+                ])
+            seq.extend([
+                OutInstr("Load", "10", comment="restore function result in R0"),
+                OutInstr("Jump", return_dispatch, comment="return via generated dispatch table"),
+            ])
         else:
-            seq = [OutInstr(node.op, node.arg, comment=node.comment)]
+            seq.append(OutInstr(node.op, node.arg, comment=node.comment))
 
         out.extend(emit_with_labels(labels, seq))
 
@@ -286,7 +325,10 @@ def translate(source: str, stack_base: Optional[int] = None) -> tuple[str, dict[
 
 def main(argv: Optional[list[str]] = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Translate RAM assembly with 'call LABEL' and 'ret' into ordinary RAM assembly."
+        description=(
+            "Translate RAM assembly with 'call LABEL' and 'ret' into ordinary RAM assembly; "
+            "automatically preserve R2-R5 for called functions."
+        )
     )
     parser.add_argument("input", type=Path, help="input .tur_call file")
     parser.add_argument("-o", "--output", type=Path, help="output .asm file (default: input with .asm suffix)")
