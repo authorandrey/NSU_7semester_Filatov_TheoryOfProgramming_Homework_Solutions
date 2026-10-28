@@ -1,0 +1,86 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2cm}
+
+\begin{document}
+
+\section*{Задача №1}
+
+\begin{verbatim}
+Load =4
+Store 15
+Sub =97
+Store 4
+Write =15
+Write 15
+Write *15
+Halt 0
+\end{verbatim}
+
+\section*{Задача №2}
+
+Вход: $a\geq 1$, $b\geq 1$. Выход: $a\bmod b$.
+
+\begin{verbatim}
+Read 1		; r1 := a
+Read 2		; r2 := b
+Load 1		; r0 := a
+Div 2		; r0 := a // b
+Mult 2		; r0 := (a // b) * b
+Sub 1		; r0 := ((a // b) * b) - a
+Mult =-1	; r0 := (((a // b) * b) - a) * (-1) = a % b
+Write 0		; a % b -> OUT
+\end{verbatim}
+
+\section*{Задача №3}
+
+Вход: $n\geq 1$, $a_1,\ldots,a_n$. Выход: $a_n,\ldots,a_1$.
+
+\subsection*{Псевдокод}
+
+\begin{verbatim}
+read n
+for i = 0 to n - 1:
+    A[i] := read()
+for i = n - 1 downto 0:
+    write(A[i])
+\end{verbatim}
+
+\subsection*{Программа}
+
+\begin{verbatim}
+Read 1		; r1 := n
+Load =3
+Store 2		; r2 := 3 = arr.begin()
+Load 1
+Add =3
+Store 1		; r1 := n + 3 = arr.end()
+READ_LOOP: Load 1
+	Sub 2
+	JZero READ_DONE		; if r2 == arr.end() then exit read
+	Read *2
+	Load 2
+	Add =1
+	Store 2				; r2--
+	Jump READ_LOOP
+READ_DONE: Load =2
+	Store 2				; r2 := arr.begin() - 1
+    Load 1
+    Sub =1
+    Store 1             ; r3 := &arr.last
+OUTPUT_LOOP: Load 1
+	Sub 2
+	JZero END
+	Write *1
+	Load 1
+	Sub =1
+	Store 1				; r1--
+	Jump OUTPUT_LOOP
+END: Halt 0
+\end{verbatim}
+
+\end{document}

@@ -1,0 +1,36 @@
+18   1      ;   1.     Read 1
+1    3      ;   2.     Load = 3
+4    2      ;   3.     Store 2
+2    1      ;   4.     Load 1
+6    3      ;   5.     Add = 3
+4    1      ;   6.     Store 1
+
+            ; READ_LOOP:
+2    1      ;   7.     Load 1
+10   2      ;   8.     Sub 2
+24   15     ;   9.     JZero READ_DONE
+19   2      ;   10.    Read * 2
+2    2      ;   11.    Load 2
+6    1      ;   12.    Add = 1
+4    2      ;   13.    Store 2
+23   7      ;   14.    Jump READ_LOOP
+
+            ; READ_DONE:
+1    2      ;   15.    Load = 2
+4    2      ;   16.    Store 2
+2    1      ;   17.    Load 1
+9    1      ;   18.    Sub = 1
+4    1      ;   19.    Store 1
+
+            ; OUTPUT_LOOP:
+2    1      ;   20.    Load 1
+10   2      ;   21.    Sub 2
+24   28     ;   22.    JZero END
+22   1      ;   23.    Write * 1
+2    1      ;   24.    Load 1
+9    1      ;   25.    Sub = 1
+4    1      ;   26.    Store 1
+23   20     ;   27.    Jump OUTPUT_LOOP
+
+            ; END:
+0    0      ;   28.    Halt 0
